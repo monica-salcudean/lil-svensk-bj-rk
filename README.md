@@ -71,4 +71,4 @@ Write the Pages URL to an NFC sticker with an app like **NFC Tools**: Write → 
 
 ---
 
-Built as a personal project to go from A2 to B1 Swedish before moving to Sweden. Hej då! 🐻🇸🇪
+Built as a personal project to go from A2 to B1 Swedish before moving to Sweden. Hej då! 🐻
