@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>lil svensk björn</title>
+<meta name="theme-color" content="#2f6fb0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Svensk Björn">
+<style>
+  :root{
+    --bg:#eef3f6; --bg2:#e4eef2; --card:#ffffff; --ink:#223040; --muted:#73879a;
+    --line:#dde8ef; --accent:#2f80c4; --accent-ink:#1b5e94; --warm:#f2b84b; --warm-ink:#9c6d12;
+    --good:#4caf7d; --good-bg:#e4f5ec; --bad:#e3675f; --bad-bg:#fbe8e7; --cream:#fbf6ec;
+    --shadow:0 8px 28px rgba(31,45,61,.08); --r:20px;
+  }
+  [data-theme="dark"]{
+    --bg:#10171f; --bg2:#0c1219; --card:#19222d; --ink:#e7eef5; --muted:#8fa3b5;
+    --line:#26323f; --accent:#5aa6e0; --accent-ink:#92c7ef; --warm:#f2b84b; --warm-ink:#f4d079;
+    --good:#5cbf90; --good-bg:#16302a; --bad:#e3807a; --bad-bg:#351f1f; --cream:#1f2731;
+    --shadow:0 8px 28px rgba(0,0,0,.4); --r:20px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg,var(--bg),var(--bg2));min-height:100vh;color:var(--ink);
+    -webkit-font-smoothing:antialiased;padding-bottom:92px;transition:background .3s,color .3s}
+  .wrap{max-width:720px;margin:0 auto;padding:16px}
+  header{display:flex;align-items:center;gap:10px;padding:10px 4px 18px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.12rem;letter-spacing:-.3px}
+  .logo .bear-mini{width:40px;height:40px;flex:none;background:#fbeaa6;border-radius:11px;display:grid;place-items:center}
+  .logo .bear-mini svg{width:34px;height:34px}
+  .spacer{flex:1}
+  .iconbtn{background:var(--card);border:1px solid var(--line);color:var(--ink);min-width:40px;height:40px;padding:0 10px;
+    border-radius:12px;cursor:pointer;font-size:1.05rem;display:grid;place-items:center;box-shadow:var(--shadow)}
+  .iconbtn:active{transform:scale(.94)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  h2{font-size:1.05rem;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .sub{color:var(--muted);font-size:.86rem;line-height:1.45}
+  .sv{position:relative;cursor:help;border-bottom:1px dotted transparent}
+  .sv[data-es]{border-bottom-color:var(--line)}
+  .sv[data-es]:hover::after,.sv.show::after{content:attr(data-es);position:absolute;left:50%;bottom:140%;transform:translateX(-50%);
+    background:var(--ink);color:var(--card);padding:5px 9px;border-radius:8px;font-size:.78rem;white-space:nowrap;z-index:40;box-shadow:var(--shadow);font-weight:600;pointer-events:none}
+  .sv[data-es]:hover::before,.sv.show::before{content:"";position:absolute;left:50%;bottom:140%;transform:translate(-50%,60%) rotate(45deg);width:8px;height:8px;background:var(--ink);z-index:40}
+  .hero{background:linear-gradient(145deg,var(--accent),var(--accent-ink));color:#fff;border:none;position:relative;overflow:hidden}
+  .hero .bear-big{width:128px;height:128px;position:absolute;right:-10px;bottom:-16px;opacity:.97}
+  .hero h1{font-size:1.5rem;margin-bottom:6px;max-width:66%;line-height:1.2}
+  .hero p{opacity:.92;font-size:.9rem;max-width:62%}
+  .snow{position:absolute;inset:0;pointer-events:none;opacity:.5}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 10px;text-align:center;box-shadow:var(--shadow)}
+  .stat .n{font-size:1.5rem;font-weight:800;color:var(--accent-ink)}
+  .stat .l{font-size:.72rem;color:var(--muted);margin-top:2px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .cat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;box-shadow:var(--shadow);transition:transform .12s;position:relative;overflow:hidden}
+  .cat:active{transform:scale(.97)}
+  .cat.off{opacity:.5}
+  .cat .ico{font-size:1.7rem}
+  .cat .t{font-weight:700;margin-top:6px}
+  .cat .e{font-size:.78rem;color:var(--muted)}
+  .cat .lvltag{position:absolute;top:10px;left:12px;font-size:.6rem;font-weight:800;color:var(--muted);letter-spacing:.5px}
+  .cat .bar{height:6px;background:var(--line);border-radius:5px;margin-top:10px;overflow:hidden}
+  .cat .bar i{display:block;height:100%;background:var(--warm);border-radius:5px;width:0;transition:width .5s}
+  .cat .pct{font-size:.7rem;color:var(--muted);margin-top:4px}
+  .cat .toggle{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:8px;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;font-size:.8rem;cursor:pointer}
+  .cat .toggle.on{background:var(--good);border-color:var(--good);color:#fff}
+  .btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 18px;font-size:.95rem;font-weight:700;cursor:pointer;box-shadow:var(--shadow);transition:transform .1s}
+  .btn:active{transform:scale(.96)}
+  .btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+  .btn.warm{background:var(--warm);color:var(--warm-ink)}
+  .btn.block{width:100%;margin-top:6px}
+  .btn.sm{padding:8px 12px;font-size:.82rem}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap}
+  .pill{display:inline-block;background:var(--bg);border:1.5px solid var(--line);border-radius:20px;padding:7px 15px;font-size:.85rem;margin:3px 5px 0 0;color:var(--muted);cursor:pointer;font-weight:700}
+  .pill.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .fc{perspective:1200px;margin:8px 0}
+  .fc-inner{position:relative;min-height:268px;transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+  .fc.flipped .fc-inner{transform:rotateY(180deg)}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;background:var(--card);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;box-shadow:var(--shadow)}
+  .fc-back{transform:rotateY(180deg);background:linear-gradient(160deg,var(--card),var(--bg))}
+  .fc .word{font-size:1.8rem;font-weight:800}
+  .fc .pos{font-size:.75rem;color:var(--muted);background:var(--bg);padding:3px 10px;border-radius:20px;margin-top:8px}
+  .fc .emoji{font-size:3.6rem;line-height:1;margin-bottom:6px}
+  .fc .es{font-size:1.5rem;font-weight:700;color:var(--accent-ink)}
+  .fc .ex{font-size:.9rem;margin-top:12px;color:var(--ink);font-style:italic}
+  .fc .exes{font-size:.82rem;color:var(--muted);margin-top:4px}
+  .fc .hint{position:absolute;bottom:10px;font-size:.7rem;color:var(--muted)}
+  .speak{background:var(--bg);border:1px solid var(--line);border-radius:50%;width:44px;height:44px;cursor:pointer;font-size:1.2rem;margin-top:12px;color:var(--accent-ink)}
+  .progress-dots{display:flex;gap:5px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--line)}
+  .dot.done{background:var(--good)} .dot.now{background:var(--accent);transform:scale(1.4)}
+  .opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;font-size:1rem;color:var(--ink);transition:.15s;font-weight:600}
+  .opt:active{transform:scale(.98)}
+  .opt.correct{background:var(--good-bg);border-color:var(--good);color:var(--good)}
+  .opt.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+  .opt.dim{opacity:.5}
+  .q{font-size:1.25rem;font-weight:700;text-align:center;margin:14px 0 18px;line-height:1.4}
+  .qbadge{text-align:center;font-size:.8rem;color:var(--muted);margin-bottom:6px}
+  table{width:100%;border-collapse:collapse;font-size:.9rem}
+  th,td{padding:9px 8px;text-align:left;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:.76rem;text-transform:uppercase;letter-spacing:.4px}
+  td.sw{font-weight:700;color:var(--accent-ink)}
+  .grp-pill{display:inline-block;font-size:.7rem;padding:2px 8px;border-radius:10px;background:var(--bg);color:var(--muted);margin-left:4px}
+  nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 4px env(safe-area-inset-bottom);box-shadow:0 -4px 20px rgba(0,0,0,.06);z-index:50}
+  nav button{background:none;border:none;color:var(--muted);font-size:.68rem;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 10px;border-radius:12px;font-weight:600}
+  nav button .ni{font-size:1.25rem}
+  nav button.active{color:var(--accent)} nav button.active .ni{transform:translateY(-2px)}
+  .back{background:none;border:none;color:var(--accent);font-weight:700;cursor:pointer;font-size:.9rem;margin-bottom:10px;padding:4px}
+  .center{text-align:center}
+  .big-emoji{font-size:3rem}
+  .mastery{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .m0{background:var(--line)} .m1{background:var(--warm)} .m2{background:var(--good)}
+  .wordlist{list-style:none}
+  .wordlist li{display:flex;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line);gap:8px}
+  .wordlist .em{font-size:1.1rem;width:22px;text-align:center}
+  .wordlist .w{font-weight:700}
+  .wordlist .e2{color:var(--muted);font-size:.85rem;margin-left:auto}
+  .del{background:none;border:none;color:var(--bad);cursor:pointer;font-size:.9rem;padding:2px 6px}
+  .fade{animation:fade .3s} @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .confetti{animation:pop .4s} @keyframes pop{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+  .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--card);padding:10px 18px;border-radius:30px;font-weight:600;font-size:.88rem;box-shadow:var(--shadow);z-index:99;opacity:0;transition:.3s}
+  .toast.show{opacity:1}
+  .field{margin:10px 0}
+  .field label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:4px;font-weight:600}
+  .field input,.field select,.field textarea{width:100%;padding:11px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font-size:.95rem;font-family:inherit}
+  .ringwrap{position:relative;display:inline-grid;place-items:center}
+  .ringwrap .rc{position:absolute;text-align:center;line-height:1.1}
+  .rc .rn{font-size:1.3rem;font-weight:800}
+  .rc .rl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .xpbar{height:9px;background:rgba(255,255,255,.28);border-radius:6px;overflow:hidden;margin-top:10px;max-width:66%}
+  .xpbar i{display:block;height:100%;background:var(--warm);border-radius:6px;transition:width .6s}
+  .lvlpill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);padding:4px 11px;border-radius:20px;font-size:.82rem;font-weight:700}
+  .today-card{display:flex;align-items:center;gap:16px}
+  .today-card .txt{flex:1}
+  .badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+  .badge{text-align:center;padding:12px 6px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}
+  .badge.locked{opacity:.32;filter:grayscale(1)}
+  .badge .bi{font-size:1.6rem} .badge .bn{font-size:.62rem;color:var(--muted);margin-top:4px;font-weight:600;line-height:1.1}
+  .prof-row{display:flex;align-items:center;gap:10px;padding:10px;border:1.5px solid var(--line);border-radius:12px;margin-bottom:8px}
+  .prof-row.cur{border-color:var(--accent);background:var(--bg)}
+  @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(242,184,75,.5)}50%{box-shadow:0 0 0 10px rgba(242,184,75,0)}}
+  .glow{animation:glow 1.4s ease-out}
+  #printArea{display:none}
+  @media print{@page{margin:12mm}
+    body{background:#fff;padding:0} .wrap,nav,.toast{display:none!important}
+    #printArea{display:block!important;color:#111}
+    #printArea h1{font-size:15pt;text-align:center;margin-bottom:3mm}
+    #printArea .psub{text-align:center;font-size:9pt;color:#666;margin-bottom:6mm}
+    .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+    .pcard{border:1.2pt dashed #aaa;border-radius:4mm;padding:5mm;text-align:center;break-inside:avoid;page-break-inside:avoid}
+    .pem{font-size:20pt} .psv{font-size:15pt;font-weight:800;margin-top:1mm} .ppos{font-size:7pt;color:#888;text-transform:uppercase}
+    .pes{font-size:11pt;color:#333;margin-top:2mm} .pex{font-size:8.5pt;color:#777;font-style:italic;margin-top:3mm}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><span class="bear-mini" id="bearMini"></span><span>lil svensk&nbsp;björn</span></div>
+    <div class="spacer"></div>
+    <button class="iconbtn" id="profBtn" title="Profil">🐻</button>
+    <button class="iconbtn" id="themeBtn" title="Ljus/mörk">🌙</button>
+  </header>
+  <div id="view"></div>
+</div>
+<nav id="nav"></nav>
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script>
+/* ===================== DATABAS ===================== */
+const BASE_VOCAB = {
+  vardag:{title:"Vardag",es:"Vida diaria",icon:"☕",lvl:"A2",words:[
+    {sv:"att vakna",es:"despertarse",pos:"verb",ex:"Jag vaknar klockan sju varje dag.",exEs:"Me despierto a las siete cada día."},
+    {sv:"att skynda sig",es:"darse prisa",pos:"verb",ex:"Skynda dig, bussen kommer!",exEs:"¡Date prisa, viene el autobús!"},
+    {sv:"en vana",es:"una costumbre",pos:"subst",ex:"Det är en bra vana att läsa.",exEs:"Es una buena costumbre leer."},
+    {sv:"att hinna",es:"llegar a tiempo / alcanzar",pos:"verb",ex:"Jag hinner inte äta frukost.",exEs:"No me da tiempo a desayunar."},
+    {sv:"ungefär",es:"aproximadamente",pos:"adv",ex:"Det tar ungefär en timme.",exEs:"Lleva aproximadamente una hora."},
+    {sv:"att handla",es:"comprar / hacer la compra",pos:"verb",ex:"Jag ska handla mat efter jobbet.",exEs:"Voy a comprar comida después del trabajo."},
+    {sv:"ett kvitto",es:"un recibo",pos:"subst",ex:"Får jag ett kvitto, tack?",exEs:"¿Me da un recibo, por favor?"},
+    {sv:"att städa",es:"limpiar / ordenar",pos:"verb",ex:"Vi städar lägenheten på lördagar.",exEs:"Limpiamos el piso los sábados."},
+    {sv:"trött",es:"cansado/a",pos:"adj",ex:"Jag är så trött idag.",exEs:"Estoy tan cansado hoy."},
+    {sv:"att vila",es:"descansar",pos:"verb",ex:"Jag behöver vila en stund.",exEs:"Necesito descansar un rato."},
+    {sv:"nästan",es:"casi",pos:"adv",ex:"Jag är nästan klar.",exEs:"Casi he terminado."},
+    {sv:"att försöka",es:"intentar",pos:"verb",ex:"Jag försöker lära mig svenska.",exEs:"Intento aprender sueco."},
+    {sv:"en möjlighet",es:"una posibilidad",pos:"subst",ex:"Det finns en möjlighet.",exEs:"Hay una posibilidad."},
+    {sv:"att bestämma",es:"decidir",pos:"verb",ex:"Vi måste bestämma oss.",exEs:"Tenemos que decidirnos."},
+    {sv:"viktig",es:"importante",pos:"adj",ex:"Det här är viktigt.",exEs:"Esto es importante."},
+    {sv:"att behöva",es:"necesitar",pos:"verb",ex:"Jag behöver hjälp.",exEs:"Necesito ayuda."},
+  ]},
+  mat:{title:"Mat & Dryck",es:"Comida y bebida",icon:"🍽️",lvl:"A2",words:[
+    {sv:"en måltid",es:"una comida (plato)",pos:"subst",ex:"Frukost är dagens viktigaste måltid.",exEs:"El desayuno es la comida más importante del día."},
+    {sv:"att smaka",es:"saber (a) / probar",pos:"verb",ex:"Det smakar gott!",exEs:"¡Sabe bien!"},
+    {sv:"en rätt",es:"un plato (comida)",pos:"subst",ex:"Vilken rätt vill du ha?",exEs:"¿Qué plato quieres?"},
+    {sv:"ett recept",es:"una receta",pos:"subst",ex:"Jag följer ett recept.",exEs:"Sigo una receta."},
+    {sv:"att laga mat",es:"cocinar",pos:"verb",ex:"Han lagar mat varje kväll.",exEs:"Él cocina cada noche."},
+    {sv:"en ingrediens",es:"un ingrediente",pos:"subst",ex:"Vilka ingredienser behöver vi?",exEs:"¿Qué ingredientes necesitamos?"},
+    {sv:"mätt",es:"lleno/a (saciado)",pos:"adj",ex:"Nej tack, jag är mätt.",exEs:"No gracias, estoy lleno."},
+    {sv:"hungrig",es:"hambriento/a",pos:"adj",ex:"Jag är jättehungrig.",exEs:"Tengo muchísima hambre."},
+    {sv:"att beställa",es:"pedir (en restaurante)",pos:"verb",ex:"Vi beställer två kaffe.",exEs:"Pedimos dos cafés."},
+    {sv:"en servitör",es:"un camarero",pos:"subst",ex:"Servitören kommer snart.",exEs:"El camarero viene pronto."},
+    {sv:"att provsmaka",es:"degustar / catar",pos:"verb",ex:"Får jag provsmaka?",exEs:"¿Puedo probar?"},
+    {sv:"sött",es:"dulce",pos:"adj",ex:"Kakan är för söt.",exEs:"El pastel es demasiado dulce."},
+    {sv:"salt",es:"salado / sal",pos:"adj/subst",ex:"Soppan är lite för salt.",exEs:"La sopa está un poco salada."},
+    {sv:"en efterrätt",es:"un postre",pos:"subst",ex:"Vill du ha efterrätt?",exEs:"¿Quieres postre?"},
+    {sv:"att dricka",es:"beber",pos:"verb",ex:"Jag dricker vatten.",exEs:"Bebo agua."},
+    {sv:"nyttigt",es:"sano / saludable",pos:"adj",ex:"Grönsaker är nyttigt.",exEs:"Las verduras son sanas."},
+  ]},
+  hem:{title:"Hem",es:"El hogar",icon:"🏠",lvl:"A2",words:[
+    {sv:"en lägenhet",es:"un piso / apartamento",pos:"subst",ex:"Jag bor i en liten lägenhet.",exEs:"Vivo en un piso pequeño."},
+    {sv:"en hyra",es:"un alquiler",pos:"subst",ex:"Hyran är ganska hög.",exEs:"El alquiler es bastante alto."},
+    {sv:"att flytta",es:"mudarse",pos:"verb",ex:"Vi flyttar nästa månad.",exEs:"Nos mudamos el mes que viene."},
+    {sv:"en granne",es:"un vecino",pos:"subst",ex:"Min granne är trevlig.",exEs:"Mi vecino es simpático."},
+    {sv:"ett vardagsrum",es:"un salón",pos:"subst",ex:"Vi sitter i vardagsrummet.",exEs:"Estamos sentados en el salón."},
+    {sv:"ett kök",es:"una cocina",pos:"subst",ex:"Köket är nyrenoverat.",exEs:"La cocina está recién reformada."},
+    {sv:"en soffa",es:"un sofá",pos:"subst",ex:"Katten sover på soffan.",exEs:"El gato duerme en el sofá."},
+    {sv:"ett skåp",es:"un armario",pos:"subst",ex:"Glasen står i skåpet.",exEs:"Los vasos están en el armario."},
+    {sv:"att hyra",es:"alquilar",pos:"verb",ex:"Vi hyr ett hus i sommar.",exEs:"Alquilamos una casa este verano."},
+    {sv:"en trädgård",es:"un jardín",pos:"subst",ex:"De har en stor trädgård.",exEs:"Tienen un jardín grande."},
+    {sv:"en våning",es:"una planta / piso",pos:"subst",ex:"Jag bor på tredje våningen.",exEs:"Vivo en la tercera planta."},
+    {sv:"mysigt",es:"acogedor",pos:"adj",ex:"Vilket mysigt rum!",exEs:"¡Qué habitación tan acogedora!"},
+    {sv:"att möblera",es:"amueblar",pos:"verb",ex:"Vi ska möblera rummet.",exEs:"Vamos a amueblar la habitación."},
+    {sv:"en nyckel",es:"una llave",pos:"subst",ex:"Jag har tappat nyckeln.",exEs:"He perdido la llave."},
+    {sv:"att låsa",es:"cerrar con llave",pos:"verb",ex:"Glöm inte att låsa dörren.",exEs:"No olvides cerrar la puerta con llave."},
+    {sv:"ett förråd",es:"un trastero",pos:"subst",ex:"Cyklarna står i förrådet.",exEs:"Las bicis están en el trastero."},
+  ]},
+  kropp:{title:"Kropp & Hälsa",es:"Cuerpo y salud",icon:"🩺",lvl:"A2",words:[
+    {sv:"att må",es:"sentirse / estar (de salud)",pos:"verb",ex:"Hur mår du idag?",exEs:"¿Cómo estás hoy?"},
+    {sv:"sjuk",es:"enfermo/a",pos:"adj",ex:"Jag är sjuk och stannar hemma.",exEs:"Estoy enfermo y me quedo en casa."},
+    {sv:"frisk",es:"sano / recuperado",pos:"adj",ex:"Nu är jag frisk igen.",exEs:"Ahora estoy recuperado otra vez."},
+    {sv:"att göra ont",es:"doler",pos:"verb",ex:"Det gör ont i halsen.",exEs:"Me duele la garganta."},
+    {sv:"en läkare",es:"un médico",pos:"subst",ex:"Jag ska gå till läkaren.",exEs:"Voy a ir al médico."},
+    {sv:"en tid",es:"una cita (hora)",pos:"subst",ex:"Jag har en tid imorgon.",exEs:"Tengo una cita mañana."},
+    {sv:"en medicin",es:"una medicina",pos:"subst",ex:"Ta medicinen två gånger om dagen.",exEs:"Toma la medicina dos veces al día."},
+    {sv:"att sova",es:"dormir",pos:"verb",ex:"Jag sov dåligt inatt.",exEs:"Dormí mal anoche."},
+    {sv:"att träna",es:"entrenar / hacer ejercicio",pos:"verb",ex:"Jag tränar tre gånger i veckan.",exEs:"Entreno tres veces por semana."},
+    {sv:"en huvudvärk",es:"un dolor de cabeza",pos:"subst",ex:"Jag har huvudvärk.",exEs:"Tengo dolor de cabeza."},
+    {sv:"att andas",es:"respirar",pos:"verb",ex:"Andas djupt.",exEs:"Respira hondo."},
+    {sv:"en hälsa",es:"una salud",pos:"subst",ex:"Hälsan är viktigast.",exEs:"La salud es lo más importante."},
+    {sv:"svettig",es:"sudoroso",pos:"adj",ex:"Jag blir svettig när jag springer.",exEs:"Me pongo sudoroso cuando corro."},
+    {sv:"att känna sig",es:"sentirse",pos:"verb",ex:"Jag känner mig bättre nu.",exEs:"Me siento mejor ahora."},
+    {sv:"en känsla",es:"una sensación",pos:"subst",ex:"Det är en skön känsla.",exEs:"Es una sensación agradable."},
+    {sv:"att vila upp sig",es:"reponerse",pos:"verb",ex:"Du behöver vila upp dig.",exEs:"Necesitas reponerte."},
+  ]},
+  resor:{title:"Resor",es:"Viajes",icon:"✈️",lvl:"A2",words:[
+    {sv:"en resa",es:"un viaje",pos:"subst",ex:"Resan var lång men rolig.",exEs:"El viaje fue largo pero divertido."},
+    {sv:"att resa",es:"viajar",pos:"verb",ex:"Jag reser gärna ensam.",exEs:"Me gusta viajar solo."},
+    {sv:"en biljett",es:"un billete",pos:"subst",ex:"Jag köpte en biljett online.",exEs:"Compré un billete por internet."},
+    {sv:"att boka",es:"reservar",pos:"verb",ex:"Vi bokade ett hotell.",exEs:"Reservamos un hotel."},
+    {sv:"en avgång",es:"una salida",pos:"subst",ex:"Avgången är försenad.",exEs:"La salida está retrasada."},
+    {sv:"att byta",es:"cambiar / hacer transbordo",pos:"verb",ex:"Vi måste byta tåg i Göteborg.",exEs:"Tenemos que cambiar de tren en Gotemburgo."},
+    {sv:"en resväska",es:"una maleta",pos:"subst",ex:"Min resväska är för tung.",exEs:"Mi maleta pesa demasiado."},
+    {sv:"utomlands",es:"en el extranjero",pos:"adv",ex:"Jag ska plugga utomlands.",exEs:"Voy a estudiar en el extranjero."},
+    {sv:"en gräns",es:"una frontera",pos:"subst",ex:"Vi korsade gränsen till Norge.",exEs:"Cruzamos la frontera a Noruega."},
+    {sv:"att hämta",es:"recoger / ir a buscar",pos:"verb",ex:"Jag hämtar dig på stationen.",exEs:"Te recojo en la estación."},
+    {sv:"en vy",es:"una vista",pos:"subst",ex:"Vilken fin vy!",exEs:"¡Qué vista tan bonita!"},
+    {sv:"att packa",es:"hacer la maleta",pos:"verb",ex:"Jag måste packa ikväll.",exEs:"Tengo que hacer la maleta esta noche."},
+    {sv:"en vandring",es:"una caminata / senderismo",pos:"subst",ex:"Vi gjorde en lång vandring.",exEs:"Hicimos una larga caminata."},
+    {sv:"att uppleva",es:"experimentar / vivir",pos:"verb",ex:"Jag vill uppleva något nytt.",exEs:"Quiero vivir algo nuevo."},
+    {sv:"en upplevelse",es:"una experiencia",pos:"subst",ex:"Det var en fin upplevelse.",exEs:"Fue una experiencia bonita."},
+    {sv:"att sakna",es:"echar de menos / faltar",pos:"verb",ex:"Jag saknar mitt hem.",exEs:"Echo de menos mi hogar."},
+  ]},
+  arbete:{title:"Arbete & Skola",es:"Trabajo y estudios",icon:"💼",lvl:"A2",words:[
+    {sv:"ett jobb",es:"un trabajo",pos:"subst",ex:"Jag har fått ett nytt jobb.",exEs:"He conseguido un nuevo trabajo."},
+    {sv:"att söka",es:"buscar / solicitar",pos:"verb",ex:"Jag söker jobb.",exEs:"Busco trabajo."},
+    {sv:"en ansökan",es:"una solicitud",pos:"subst",ex:"Jag skickade in min ansökan.",exEs:"Envié mi solicitud."},
+    {sv:"en lön",es:"un sueldo",pos:"subst",ex:"Lönen betalas den 25:e.",exEs:"El sueldo se paga el día 25."},
+    {sv:"en chef",es:"un jefe",pos:"subst",ex:"Min chef är hjälpsam.",exEs:"Mi jefe es servicial."},
+    {sv:"ett möte",es:"una reunión",pos:"subst",ex:"Jag har ett möte klockan tio.",exEs:"Tengo una reunión a las diez."},
+    {sv:"en uppgift",es:"una tarea",pos:"subst",ex:"Det är en svår uppgift.",exEs:"Es una tarea difícil."},
+    {sv:"att lära sig",es:"aprender",pos:"verb",ex:"Jag lär mig något nytt varje dag.",exEs:"Aprendo algo nuevo cada día."},
+    {sv:"en utbildning",es:"una formación / estudios",pos:"subst",ex:"Han har en bra utbildning.",exEs:"Él tiene una buena formación."},
+    {sv:"ett prov",es:"un examen",pos:"subst",ex:"Jag har ett prov imorgon.",exEs:"Tengo un examen mañana."},
+    {sv:"att plugga",es:"estudiar (coloquial)",pos:"verb",ex:"Jag pluggar till provet.",exEs:"Estudio para el examen."},
+    {sv:"en kollega",es:"un compañero de trabajo",pos:"subst",ex:"Mina kollegor är trevliga.",exEs:"Mis compañeros son agradables."},
+    {sv:"att tjäna",es:"ganar (dinero)",pos:"verb",ex:"Hur mycket tjänar du?",exEs:"¿Cuánto ganas?"},
+    {sv:"en erfarenhet",es:"una experiencia (laboral)",pos:"subst",ex:"Jag har mycket erfarenhet.",exEs:"Tengo mucha experiencia."},
+    {sv:"att ansvara för",es:"ser responsable de",pos:"verb",ex:"Jag ansvarar för projektet.",exEs:"Soy responsable del proyecto."},
+    {sv:"ett ansvar",es:"una responsabilidad",pos:"subst",ex:"Det är ett stort ansvar.",exEs:"Es una gran responsabilidad."},
+  ]},
+  natur:{title:"Natur & Väder",es:"Naturaleza y clima",icon:"🌲",lvl:"A2",words:[
+    {sv:"ett väder",es:"un tiempo (clima)",pos:"subst",ex:"Vilket fint väder idag!",exEs:"¡Qué buen tiempo hace hoy!"},
+    {sv:"en skog",es:"un bosque",pos:"subst",ex:"Vi gick en promenad i skogen.",exEs:"Dimos un paseo por el bosque."},
+    {sv:"en sjö",es:"un lago",pos:"subst",ex:"Vi badade i sjön.",exEs:"Nos bañamos en el lago."},
+    {sv:"att regna",es:"llover",pos:"verb",ex:"Det regnar hela dagen.",exEs:"Llueve todo el día."},
+    {sv:"att snöa",es:"nevar",pos:"verb",ex:"Det snöar ute.",exEs:"Está nevando fuera."},
+    {sv:"molnig",es:"nublado",pos:"adj",ex:"Himlen är molnig.",exEs:"El cielo está nublado."},
+    {sv:"en sol",es:"un sol",pos:"subst",ex:"Solen skiner.",exEs:"El sol brilla."},
+    {sv:"en vind",es:"un viento",pos:"subst",ex:"Det blåser hård vind.",exEs:"Sopla un viento fuerte."},
+    {sv:"kallt",es:"frío",pos:"adj",ex:"Det är kallt ute idag.",exEs:"Hace frío fuera hoy."},
+    {sv:"varmt",es:"caluroso / calor",pos:"adj",ex:"Det är varmt på sommaren.",exEs:"Hace calor en verano."},
+    {sv:"en årstid",es:"una estación (del año)",pos:"subst",ex:"Höst är min favoritårstid.",exEs:"El otoño es mi estación favorita."},
+    {sv:"ett berg",es:"una montaña",pos:"subst",ex:"Vi klättrade upp på berget.",exEs:"Escalamos la montaña."},
+    {sv:"en strand",es:"una playa",pos:"subst",ex:"Stranden var full med folk.",exEs:"La playa estaba llena de gente."},
+    {sv:"att frysa",es:"tener frío / congelarse",pos:"verb",ex:"Jag fryser, det är kallt!",exEs:"Tengo frío, ¡hace frío!"},
+    {sv:"en natur",es:"una naturaleza",pos:"subst",ex:"Sverige har vacker natur.",exEs:"Suecia tiene una naturaleza preciosa."},
+    {sv:"en istapp",es:"un carámbano",pos:"subst",ex:"Det hänger istappar från taket.",exEs:"Cuelgan carámbanos del tejado."},
+  ]},
+  kanslor:{title:"Känslor",es:"Emociones",icon:"💛",lvl:"A2",words:[
+    {sv:"glad",es:"contento/a",pos:"adj",ex:"Jag är glad att se dig.",exEs:"Estoy contento de verte."},
+    {sv:"ledsen",es:"triste",pos:"adj",ex:"Hon ser ledsen ut.",exEs:"Ella parece triste."},
+    {sv:"arg",es:"enfadado/a",pos:"adj",ex:"Han blev arg på mig.",exEs:"Se enfadó conmigo."},
+    {sv:"rädd",es:"asustado/a",pos:"adj",ex:"Jag är rädd för mörkret.",exEs:"Tengo miedo a la oscuridad."},
+    {sv:"nöjd",es:"satisfecho/a",pos:"adj",ex:"Jag är nöjd med resultatet.",exEs:"Estoy satisfecho con el resultado."},
+    {sv:"besviken",es:"decepcionado/a",pos:"adj",ex:"Jag blev besviken.",exEs:"Me quedé decepcionado."},
+    {sv:"stolt",es:"orgulloso/a",pos:"adj",ex:"Jag är stolt över dig.",exEs:"Estoy orgulloso de ti."},
+    {sv:"nervös",es:"nervioso/a",pos:"adj",ex:"Jag är nervös inför provet.",exEs:"Estoy nervioso por el examen."},
+    {sv:"att skratta",es:"reír",pos:"verb",ex:"Vi skrattade hela kvällen.",exEs:"Reímos toda la noche."},
+    {sv:"att gråta",es:"llorar",pos:"verb",ex:"Hon började gråta.",exEs:"Ella empezó a llorar."},
+    {sv:"att oroa sig",es:"preocuparse",pos:"verb",ex:"Oroa dig inte!",exEs:"¡No te preocupes!"},
+    {sv:"lugn",es:"tranquilo/a",pos:"adj",ex:"Var lugn, allt ordnar sig.",exEs:"Tranquilo, todo se arreglará."},
+    {sv:"trygg",es:"seguro/a (a salvo)",pos:"adj",ex:"Hemma känns tryggt.",exEs:"En casa me siento seguro."},
+    {sv:"förvånad",es:"sorprendido/a",pos:"adj",ex:"Jag blev förvånad.",exEs:"Me sorprendí."},
+    {sv:"att sakna någon",es:"echar de menos a alguien",pos:"verb",ex:"Jag saknar dig.",exEs:"Te echo de menos."},
+    {sv:"glädje",es:"alegría",pos:"subst",ex:"Vilken glädje att ses!",exEs:"¡Qué alegría vernos!"},
+  ]},
+  klader:{title:"Kläder",es:"Ropa",icon:"🧥",lvl:"A2",words:[
+    {sv:"en tröja",es:"un jersey",pos:"subst",ex:"Jag köpte en varm tröja.",exEs:"Compré un jersey calentito."},
+    {sv:"en jacka",es:"una chaqueta",pos:"subst",ex:"Ta på dig jackan, det är kallt.",exEs:"Ponte la chaqueta, hace frío."},
+    {sv:"ett par byxor",es:"unos pantalones",pos:"subst",ex:"De här byxorna är för stora.",exEs:"Estos pantalones son demasiado grandes."},
+    {sv:"en mössa",es:"un gorro",pos:"subst",ex:"Glöm inte mössan!",exEs:"¡No olvides el gorro!"},
+    {sv:"en vante",es:"una manopla",pos:"subst",ex:"Jag har tappat en vante.",exEs:"He perdido una manopla."},
+    {sv:"en sko",es:"un zapato",pos:"subst",ex:"Mina skor är blöta.",exEs:"Mis zapatos están mojados."},
+    {sv:"att ta på sig",es:"ponerse (ropa)",pos:"verb",ex:"Jag tar på mig skorna.",exEs:"Me pongo los zapatos."},
+    {sv:"att ta av sig",es:"quitarse (ropa)",pos:"verb",ex:"Ta av dig jackan inomhus.",exEs:"Quítate la chaqueta dentro."},
+    {sv:"att passa",es:"quedar bien / tallar",pos:"verb",ex:"Tröjan passar perfekt.",exEs:"El jersey queda perfecto."},
+    {sv:"en storlek",es:"una talla",pos:"subst",ex:"Vilken storlek har du?",exEs:"¿Qué talla tienes?"},
+    {sv:"att prova",es:"probarse",pos:"verb",ex:"Får jag prova den här?",exEs:"¿Puedo probarme esta?"},
+    {sv:"ett plagg",es:"una prenda",pos:"subst",ex:"Det är ett dyrt plagg.",exEs:"Es una prenda cara."},
+    {sv:"randig",es:"de rayas",pos:"adj",ex:"Han har en randig tröja.",exEs:"Él lleva un jersey de rayas."},
+    {sv:"rutig",es:"de cuadros",pos:"adj",ex:"En rutig skjorta.",exEs:"Una camisa de cuadros."},
+    {sv:"bekväm",es:"cómodo/a",pos:"adj",ex:"Skorna är väldigt bekväma.",exEs:"Los zapatos son muy cómodos."},
+    {sv:"en halsduk",es:"una bufanda",pos:"subst",ex:"Hon virar halsduken runt halsen.",exEs:"Se enrolla la bufanda al cuello."},
+  ]},
+  tid:{title:"Tid",es:"El tiempo (reloj/calendario)",icon:"🕐",lvl:"A2",words:[
+    {sv:"en vecka",es:"una semana",pos:"subst",ex:"Vi ses nästa vecka.",exEs:"Nos vemos la semana que viene."},
+    {sv:"förra",es:"pasado/a (anterior)",pos:"adj",ex:"Förra året bodde jag i Madrid.",exEs:"El año pasado vivía en Madrid."},
+    {sv:"nästa",es:"próximo/a",pos:"adj",ex:"Nästa gång bjuder jag.",exEs:"La próxima vez invito yo."},
+    {sv:"igår",es:"ayer",pos:"adv",ex:"Igår regnade det.",exEs:"Ayer llovió."},
+    {sv:"imorgon",es:"mañana",pos:"adv",ex:"Imorgon börjar jag jobba.",exEs:"Mañana empiezo a trabajar."},
+    {sv:"snart",es:"pronto",pos:"adv",ex:"Jag är snart klar.",exEs:"Termino pronto."},
+    {sv:"sällan",es:"rara vez",pos:"adv",ex:"Jag äter sällan kött.",exEs:"Rara vez como carne."},
+    {sv:"ofta",es:"a menudo",pos:"adv",ex:"Vi ses ganska ofta.",exEs:"Nos vemos bastante a menudo."},
+    {sv:"alltid",es:"siempre",pos:"adv",ex:"Jag är alltid sen.",exEs:"Siempre llego tarde."},
+    {sv:"aldrig",es:"nunca",pos:"adv",ex:"Jag dricker aldrig kaffe.",exEs:"Nunca bebo café."},
+    {sv:"en stund",es:"un rato",pos:"subst",ex:"Vänta en stund.",exEs:"Espera un rato."},
+    {sv:"att ta tid",es:"llevar tiempo",pos:"verb",ex:"Det tar tid att lära sig.",exEs:"Lleva tiempo aprender."},
+    {sv:"tidig",es:"temprano",pos:"adj",ex:"Jag vaknade tidigt.",exEs:"Me desperté temprano."},
+    {sv:"sen",es:"tarde",pos:"adj",ex:"Det blev sent igår.",exEs:"Se hizo tarde ayer."},
+    {sv:"en framtid",es:"un futuro",pos:"subst",ex:"Jag tänker på framtiden.",exEs:"Pienso en el futuro."},
+    {sv:"ett förflutet",es:"un pasado",pos:"subst",ex:"Glöm det förflutna.",exEs:"Olvida el pasado."},
+  ]},
+  a1_grund:{title:"Grunderna",es:"Lo básico",icon:"👋",lvl:"A1",words:[
+    {sv:"hej",es:"hola",pos:"uttryck",ex:"Hej, hur mår du?",exEs:"Hola, ¿cómo estás?"},
+    {sv:"hej då",es:"adiós",pos:"uttryck",ex:"Hej då, vi ses!",exEs:"¡Adiós, nos vemos!"},
+    {sv:"tack",es:"gracias",pos:"uttryck",ex:"Tack så mycket!",exEs:"¡Muchas gracias!"},
+    {sv:"ja",es:"sí",pos:"uttryck",ex:"Ja, det stämmer.",exEs:"Sí, es correcto."},
+    {sv:"nej",es:"no",pos:"uttryck",ex:"Nej, tack.",exEs:"No, gracias."},
+    {sv:"snälla",es:"por favor",pos:"uttryck",ex:"Snälla, hjälp mig.",exEs:"Por favor, ayúdame."},
+    {sv:"ursäkta",es:"disculpa / perdona",pos:"uttryck",ex:"Ursäkta, var är toaletten?",exEs:"Disculpa, ¿dónde está el baño?"},
+    {sv:"förlåt",es:"lo siento",pos:"uttryck",ex:"Förlåt, jag är sen.",exEs:"Perdón, llego tarde."},
+    {sv:"varsågod",es:"de nada / aquí tienes",pos:"uttryck",ex:"Varsågod!",exEs:"¡Aquí tienes!"},
+    {sv:"kanske",es:"quizás",pos:"adv",ex:"Kanske imorgon.",exEs:"Quizás mañana."},
+    {sv:"bra",es:"bien / bueno",pos:"adj",ex:"Jag mår bra.",exEs:"Estoy bien."},
+    {sv:"dålig",es:"malo",pos:"adj",ex:"Vädret är dåligt.",exEs:"El tiempo es malo."},
+    {sv:"ett namn",es:"un nombre",pos:"subst",ex:"Vad är ditt namn?",exEs:"¿Cuál es tu nombre?"},
+    {sv:"att heta",es:"llamarse",pos:"verb",ex:"Jag heter Anna.",exEs:"Me llamo Anna."},
+    {sv:"att prata",es:"hablar",pos:"verb",ex:"Vi pratar svenska.",exEs:"Hablamos sueco."},
+    {sv:"en fråga",es:"una pregunta",pos:"subst",ex:"Jag har en fråga.",exEs:"Tengo una pregunta."},
+  ]},
+  a1_familj:{title:"Familjen",es:"La familia",icon:"👨‍👩‍👧",lvl:"A1",words:[
+    {sv:"en familj",es:"una familia",pos:"subst",ex:"Min familj är stor.",exEs:"Mi familia es grande."},
+    {sv:"en mamma",es:"una mamá",pos:"subst",ex:"Min mamma heter Eva.",exEs:"Mi mamá se llama Eva."},
+    {sv:"en pappa",es:"un papá",pos:"subst",ex:"Min pappa jobbar mycket.",exEs:"Mi papá trabaja mucho."},
+    {sv:"en bror",es:"un hermano",pos:"subst",ex:"Jag har en bror.",exEs:"Tengo un hermano."},
+    {sv:"en syster",es:"una hermana",pos:"subst",ex:"Min syster är äldre.",exEs:"Mi hermana es mayor."},
+    {sv:"ett barn",es:"un niño / hijo",pos:"subst",ex:"De har tre barn.",exEs:"Tienen tres hijos."},
+    {sv:"en son",es:"un hijo",pos:"subst",ex:"Deras son är fem år.",exEs:"Su hijo tiene cinco años."},
+    {sv:"en dotter",es:"una hija",pos:"subst",ex:"Min dotter gillar att måla.",exEs:"A mi hija le gusta pintar."},
+    {sv:"en vän",es:"un amigo",pos:"subst",ex:"Han är min bästa vän.",exEs:"Es mi mejor amigo."},
+    {sv:"en katt",es:"un gato",pos:"subst",ex:"Katten sover mycket.",exEs:"El gato duerme mucho."},
+    {sv:"en hund",es:"un perro",pos:"subst",ex:"Hunden är snäll.",exEs:"El perro es bueno."},
+    {sv:"ett husdjur",es:"una mascota",pos:"subst",ex:"Har du husdjur?",exEs:"¿Tienes mascotas?"},
+    {sv:"gift",es:"casado/a",pos:"adj",ex:"De är gifta.",exEs:"Están casados."},
+    {sv:"tillsammans",es:"juntos",pos:"adv",ex:"Vi bor tillsammans.",exEs:"Vivimos juntos."},
+    {sv:"ung",es:"joven",pos:"adj",ex:"Hon är ung.",exEs:"Ella es joven."},
+    {sv:"gammal",es:"viejo / mayor",pos:"adj",ex:"Min farfar är gammal.",exEs:"Mi abuelo es mayor."},
+  ]},
+  a1_siffror:{title:"Siffror & färger",es:"Números y colores",icon:"🔢",lvl:"A1",words:[
+    {sv:"ett",es:"uno",pos:"räkneord",ex:"Jag vill ha ett äpple.",exEs:"Quiero una manzana."},
+    {sv:"två",es:"dos",pos:"räkneord",ex:"Vi är två personer.",exEs:"Somos dos personas."},
+    {sv:"tre",es:"tres",pos:"räkneord",ex:"Klockan är tre.",exEs:"Son las tres."},
+    {sv:"fyra",es:"cuatro",pos:"räkneord",ex:"Jag har fyra böcker.",exEs:"Tengo cuatro libros."},
+    {sv:"fem",es:"cinco",pos:"räkneord",ex:"Fem minuter kvar.",exEs:"Quedan cinco minutos."},
+    {sv:"sex",es:"seis",pos:"räkneord",ex:"Hon är sex år.",exEs:"Ella tiene seis años."},
+    {sv:"sju",es:"siete",pos:"räkneord",ex:"Veckan har sju dagar.",exEs:"La semana tiene siete días."},
+    {sv:"åtta",es:"ocho",pos:"räkneord",ex:"Klockan åtta.",exEs:"A las ocho."},
+    {sv:"nio",es:"nueve",pos:"räkneord",ex:"Nio av tio.",exEs:"Nueve de diez."},
+    {sv:"tio",es:"diez",pos:"räkneord",ex:"Tio euro.",exEs:"Diez euros."},
+    {sv:"röd",es:"rojo",pos:"adj",ex:"En röd bil.",exEs:"Un coche rojo."},
+    {sv:"blå",es:"azul",pos:"adj",ex:"Himlen är blå.",exEs:"El cielo es azul."},
+    {sv:"grön",es:"verde",pos:"adj",ex:"Gräset är grönt.",exEs:"La hierba es verde."},
+    {sv:"gul",es:"amarillo",pos:"adj",ex:"En gul blomma.",exEs:"Una flor amarilla."},
+    {sv:"svart",es:"negro",pos:"adj",ex:"En svart katt.",exEs:"Un gato negro."},
+    {sv:"vit",es:"blanco",pos:"adj",ex:"Snön är vit.",exEs:"La nieve es blanca."},
+  ]},
+  b1_samhalle:{title:"Samhälle & åsikter",es:"Sociedad y opiniones",icon:"💬",lvl:"B1",words:[
+    {sv:"en åsikt",es:"una opinión",pos:"subst",ex:"Alla har rätt till en åsikt.",exEs:"Todos tienen derecho a una opinión."},
+    {sv:"att tycka",es:"opinar / pensar",pos:"verb",ex:"Vad tycker du om det?",exEs:"¿Qué opinas de eso?"},
+    {sv:"att påstå",es:"afirmar",pos:"verb",ex:"Han påstår att det är sant.",exEs:"Afirma que es verdad."},
+    {sv:"ett samhälle",es:"una sociedad",pos:"subst",ex:"Vårt samhälle förändras.",exEs:"Nuestra sociedad cambia."},
+    {sv:"en miljö",es:"un medio ambiente",pos:"subst",ex:"Vi måste skydda miljön.",exEs:"Debemos proteger el medio ambiente."},
+    {sv:"att påverka",es:"influir / afectar",pos:"verb",ex:"Det påverkar oss alla.",exEs:"Nos afecta a todos."},
+    {sv:"en utveckling",es:"un desarrollo",pos:"subst",ex:"En positiv utveckling.",exEs:"Un desarrollo positivo."},
+    {sv:"en fördel",es:"una ventaja",pos:"subst",ex:"Det är en stor fördel.",exEs:"Es una gran ventaja."},
+    {sv:"en nackdel",es:"una desventaja",pos:"subst",ex:"Det finns nackdelar.",exEs:"Hay desventajas."},
+    {sv:"att innebära",es:"implicar / significar",pos:"verb",ex:"Vad innebär det?",exEs:"¿Qué implica eso?"},
+    {sv:"däremot",es:"en cambio",pos:"adv",ex:"Jag, däremot, håller inte med.",exEs:"Yo, en cambio, no estoy de acuerdo."},
+    {sv:"trots",es:"a pesar de",pos:"prep",ex:"Trots regnet gick vi ut.",exEs:"A pesar de la lluvia salimos."},
+    {sv:"en lösning",es:"una solución",pos:"subst",ex:"Vi hittade en lösning.",exEs:"Encontramos una solución."},
+    {sv:"att kräva",es:"exigir / requerir",pos:"verb",ex:"Det kräver tid.",exEs:"Requiere tiempo."},
+    {sv:"en orsak",es:"una causa",pos:"subst",ex:"Vad är orsaken?",exEs:"¿Cuál es la causa?"},
+    {sv:"att förbättra",es:"mejorar",pos:"verb",ex:"Vi vill förbättra systemet.",exEs:"Queremos mejorar el sistema."},
+  ]},
+  b2_arbetsliv:{title:"Arbetsliv",es:"Vida laboral (avanzado)",icon:"📊",lvl:"B2",words:[
+    {sv:"en arbetsgivare",es:"un empleador",pos:"subst",ex:"Arbetsgivaren erbjöd flexibla tider.",exEs:"El empleador ofreció horarios flexibles."},
+    {sv:"en anställning",es:"un empleo / contrato",pos:"subst",ex:"Hon fick en fast anställning.",exEs:"Consiguió un contrato fijo."},
+    {sv:"en deadline",es:"una fecha límite",pos:"subst",ex:"Vi måste hålla deadlinen.",exEs:"Tenemos que cumplir la fecha límite."},
+    {sv:"att samarbeta",es:"colaborar",pos:"verb",ex:"Teamen samarbetar bra.",exEs:"Los equipos colaboran bien."},
+    {sv:"ett avtal",es:"un acuerdo / contrato",pos:"subst",ex:"Vi skrev under ett avtal.",exEs:"Firmamos un acuerdo."},
+    {sv:"en förhandling",es:"una negociación",pos:"subst",ex:"Förhandlingen tog hela dagen.",exEs:"La negociación duró todo el día."},
+    {sv:"att prioritera",es:"priorizar",pos:"verb",ex:"Jag måste prioritera mina uppgifter.",exEs:"Tengo que priorizar mis tareas."},
+    {sv:"en kompetens",es:"una competencia",pos:"subst",ex:"Språk är en viktig kompetens.",exEs:"Los idiomas son una competencia importante."},
+    {sv:"en arbetsbörda",es:"una carga de trabajo",pos:"subst",ex:"Arbetsbördan har ökat.",exEs:"La carga de trabajo ha aumentado."},
+    {sv:"att effektivisera",es:"optimizar / hacer más eficiente",pos:"verb",ex:"Vi vill effektivisera processen.",exEs:"Queremos optimizar el proceso."},
+    {sv:"en budget",es:"un presupuesto",pos:"subst",ex:"Projektet höll budgeten.",exEs:"El proyecto respetó el presupuesto."},
+    {sv:"ett mål",es:"un objetivo",pos:"subst",ex:"Vi nådde våra mål.",exEs:"Alcanzamos nuestros objetivos."},
+    {sv:"att genomföra",es:"llevar a cabo",pos:"verb",ex:"Planen genomfördes i tid.",exEs:"El plan se llevó a cabo a tiempo."},
+    {sv:"en utmaning",es:"un reto",pos:"subst",ex:"Det var en spännande utmaning.",exEs:"Fue un reto apasionante."},
+    {sv:"hållbar",es:"sostenible",pos:"adj",ex:"Vi satsar på hållbar tillväxt.",exEs:"Apostamos por un crecimiento sostenible."},
+    {sv:"en lönsamhet",es:"una rentabilidad",pos:"subst",ex:"Lönsamheten ökade i år.",exEs:"La rentabilidad aumentó este año."},
+  ]},
+  b2_abstrakt:{title:"Nyanser & abstrakt",es:"Matices y abstracto",icon:"🧠",lvl:"B2",words:[
+    {sv:"en företeelse",es:"un fenómeno",pos:"subst",ex:"Det är en vanlig företeelse.",exEs:"Es un fenómeno común."},
+    {sv:"ett sammanhang",es:"un contexto",pos:"subst",ex:"Det beror på sammanhanget.",exEs:"Depende del contexto."},
+    {sv:"en avsikt",es:"una intención",pos:"subst",ex:"Det var inte min avsikt.",exEs:"No era mi intención."},
+    {sv:"att uppfatta",es:"percibir / entender",pos:"verb",ex:"Hur uppfattar du situationen?",exEs:"¿Cómo percibes la situación?"},
+    {sv:"en slutsats",es:"una conclusión",pos:"subst",ex:"Vi drog en slutsats.",exEs:"Sacamos una conclusión."},
+    {sv:"att ifrågasätta",es:"cuestionar",pos:"verb",ex:"Hon ifrågasatte beslutet.",exEs:"Ella cuestionó la decisión."},
+    {sv:"en förutsättning",es:"un requisito / premisa",pos:"subst",ex:"Tillit är en förutsättning.",exEs:"La confianza es un requisito."},
+    {sv:"att innebära",es:"implicar",pos:"verb",ex:"Det innebär stora risker.",exEs:"Eso implica grandes riesgos."},
+    {sv:"en motsägelse",es:"una contradicción",pos:"subst",ex:"Det finns en motsägelse här.",exEs:"Hay una contradicción aquí."},
+    {sv:"rimlig",es:"razonable",pos:"adj",ex:"Det låter rimligt.",exEs:"Suena razonable."},
+    {sv:"att betrakta",es:"considerar",pos:"verb",ex:"Jag betraktar det som ett problem.",exEs:"Lo considero un problema."},
+    {sv:"en tendens",es:"una tendencia",pos:"subst",ex:"Det finns en tydlig tendens.",exEs:"Hay una tendencia clara."},
+    {sv:"underförstådd",es:"implícito",pos:"adj",ex:"Det var underförstått.",exEs:"Estaba implícito."},
+    {sv:"att framhäva",es:"destacar / resaltar",pos:"verb",ex:"Hon framhävde fördelarna.",exEs:"Ella destacó las ventajas."},
+    {sv:"ett antagande",es:"una suposición",pos:"subst",ex:"Det bygger på ett antagande.",exEs:"Se basa en una suposición."},
+    {sv:"följaktligen",es:"por consiguiente",pos:"adv",ex:"Följaktligen måste vi vänta.",exEs:"Por consiguiente, debemos esperar."},
+  ]},
+};
+
+/* Emoji per ord (visas på flashcard-baksidan) */
+const EMOJI={
+  "att vakna":"⏰","att skynda sig":"🏃","att handla":"🛒","ett kvitto":"🧾","att städa":"🧹","trött":"😴","att vila":"😌","att försöka":"💪","att behöva":"🙏",
+  "en måltid":"🍽️","att smaka":"👅","en rätt":"🍲","ett recept":"📖","att laga mat":"👨‍🍳","en ingrediens":"🥕","mätt":"😋","hungrig":"🤤","att beställa":"🙋","en servitör":"🤵","att provsmaka":"😋","sött":"🍰","salt":"🧂","en efterrätt":"🍨","att dricka":"🥤","nyttigt":"🥗",
+  "en lägenhet":"🏢","en hyra":"💶","att flytta":"📦","en granne":"🏘️","ett vardagsrum":"🛋️","ett kök":"🍳","en soffa":"🛋️","ett skåp":"🗄️","en trädgård":"🌳","en våning":"🏢","mysigt":"🕯️","att möblera":"🪑","en nyckel":"🔑","att låsa":"🔒","ett förråd":"📦","att hyra":"🏠",
+  "sjuk":"🤒","frisk":"💪","att göra ont":"🤕","en läkare":"🧑‍⚕️","en tid":"📅","en medicin":"💊","att sova":"😴","att träna":"🏋️","en huvudvärk":"🤕","att andas":"🌬️","svettig":"💦","en känsla":"💭","en hälsa":"❤️","att må":"🙂",
+  "en resa":"🧳","att resa":"✈️","en biljett":"🎫","att boka":"📅","en avgång":"🛫","att byta":"🔄","en resväska":"🧳","utomlands":"🌍","en gräns":"🛂","en vy":"🏞️","att packa":"🧳","en vandring":"🥾","att uppleva":"✨","en upplevelse":"✨","att sakna":"💭",
+  "ett jobb":"💼","att söka":"🔍","en ansökan":"📄","en lön":"💶","en chef":"👔","ett möte":"📅","en uppgift":"📋","att lära sig":"📚","en utbildning":"🎓","ett prov":"📝","att plugga":"📖","en kollega":"👥","att tjäna":"💰",
+  "ett väder":"⛅","en skog":"🌲","en sjö":"🏞️","att regna":"🌧️","att snöa":"❄️","molnig":"☁️","en sol":"☀️","en vind":"💨","kallt":"🥶","varmt":"🥵","en årstid":"🍂","ett berg":"⛰️","en strand":"🏖️","att frysa":"🥶","en natur":"🌳","en istapp":"🧊",
+  "glad":"😊","ledsen":"😢","arg":"😠","rädd":"😨","nöjd":"😌","besviken":"😞","stolt":"🥹","nervös":"😰","att skratta":"😂","att gråta":"😭","att oroa sig":"😟","lugn":"😌","trygg":"🤗","förvånad":"😲","att sakna någon":"💔","glädje":"🥳",
+  "en tröja":"🧥","en jacka":"🧥","ett par byxor":"👖","en mössa":"🧢","en vante":"🧤","en sko":"👟","en storlek":"📏","att prova":"👗","ett plagg":"👚","bekväm":"😌","en halsduk":"🧣","att ta på sig":"👕",
+  "en vecka":"📅","igår":"⬅️","imorgon":"➡️","snart":"⏳","alltid":"♾️","aldrig":"🚫","en stund":"⏳","att ta tid":"⌛","tidig":"🌅","sen":"🌙","en framtid":"🔮",
+  "hej":"👋","hej då":"👋","tack":"🙏","ja":"✅","nej":"❌","snälla":"🥺","ursäkta":"🙇","förlåt":"😔","varsågod":"🤲","kanske":"🤔","bra":"👍","dålig":"👎","ett namn":"🏷️","att heta":"🏷️","att prata":"💬","en fråga":"❓",
+  "en familj":"👨‍👩‍👧","en mamma":"👩","en pappa":"👨","en bror":"👦","en syster":"👧","ett barn":"🧒","en son":"👦","en dotter":"👧","en vän":"🤝","en katt":"🐱","en hund":"🐶","ett husdjur":"🐾","gift":"💍","tillsammans":"🫂","ung":"🧒","gammal":"👴",
+  "ett":"1️⃣","två":"2️⃣","tre":"3️⃣","fyra":"4️⃣","fem":"5️⃣","sex":"6️⃣","sju":"7️⃣","åtta":"8️⃣","nio":"9️⃣","tio":"🔟","röd":"🔴","blå":"🔵","grön":"🟢","gul":"🟡","svart":"⚫","vit":"⚪",
+  "en åsikt":"💬","att tycka":"🤔","ett samhälle":"🏙️","en miljö":"🌍","att påverka":"🔀","en utveckling":"📈","en fördel":"➕","en nackdel":"➖","en lösning":"💡","att kräva":"✊","en orsak":"🎯","att förbättra":"⬆️",
+  "en arbetsgivare":"🏢","en anställning":"📝","en deadline":"⏰","att samarbeta":"🤝","ett avtal":"📜","en förhandling":"🤝","att prioritera":"🔝","en kompetens":"🎯","en budget":"💶","ett mål":"🎯","en utmaning":"🧗","hållbar":"♻️","en slutsats":"✅","en tendens":"📈",
+};
+
+const VERBS = {
+  groups:{
+    1:{name:"Grupp 1 (-ar)",es:"Verbos en -ar: los más regulares y frecuentes. Pretérito en -ade.",pattern:"tala → talar → talade → talat"},
+    2:{name:"Grupp 2 (-er)",es:"Verbos en -er. Pretérito en -de o -te según la consonante.",pattern:"ringa → ringer → ringde → ringt"},
+    3:{name:"Grupp 3 (-r)",es:"Verbos cortos que acaban en vocal. Pretérito en -dde.",pattern:"bo → bor → bodde → bott"},
+    4:{name:"Grupp 4 (oregelbundna)",es:"Verbos fuertes/irregulares. Cambian la vocal.",pattern:"gå → går → gick → gått"},
+  },
+  list:[
+    {inf:"att tala",es:"hablar",grp:1,presens:"talar",pret:"talade",sup:"talat",imp:"tala"},
+    {inf:"att jobba",es:"trabajar",grp:1,presens:"jobbar",pret:"jobbade",sup:"jobbat",imp:"jobba"},
+    {inf:"att bo",es:"vivir/residir",grp:3,presens:"bor",pret:"bodde",sup:"bott",imp:"bo"},
+    {inf:"att äta",es:"comer",grp:4,presens:"äter",pret:"åt",sup:"ätit",imp:"ät"},
+    {inf:"att dricka",es:"beber",grp:4,presens:"dricker",pret:"drack",sup:"druckit",imp:"drick"},
+    {inf:"att gå",es:"ir/caminar",grp:4,presens:"går",pret:"gick",sup:"gått",imp:"gå"},
+    {inf:"att komma",es:"venir",grp:4,presens:"kommer",pret:"kom",sup:"kommit",imp:"kom"},
+    {inf:"att göra",es:"hacer",grp:4,presens:"gör",pret:"gjorde",sup:"gjort",imp:"gör"},
+    {inf:"att se",es:"ver",grp:4,presens:"ser",pret:"såg",sup:"sett",imp:"se"},
+    {inf:"att ta",es:"tomar/coger",grp:4,presens:"tar",pret:"tog",sup:"tagit",imp:"ta"},
+    {inf:"att köpa",es:"comprar",grp:2,presens:"köper",pret:"köpte",sup:"köpt",imp:"köp"},
+    {inf:"att ringa",es:"llamar",grp:2,presens:"ringer",pret:"ringde",sup:"ringt",imp:"ring"},
+    {inf:"att läsa",es:"leer",grp:2,presens:"läser",pret:"läste",sup:"läst",imp:"läs"},
+    {inf:"att skriva",es:"escribir",grp:4,presens:"skriver",pret:"skrev",sup:"skrivit",imp:"skriv"},
+    {inf:"att sova",es:"dormir",grp:4,presens:"sover",pret:"sov",sup:"sovit",imp:"sov"},
+    {inf:"att förstå",es:"entender",grp:4,presens:"förstår",pret:"förstod",sup:"förstått",imp:"förstå"},
+    {inf:"att veta",es:"saber",grp:4,presens:"vet",pret:"visste",sup:"vetat",imp:"vet"},
+    {inf:"att ge",es:"dar",grp:4,presens:"ger",pret:"gav",sup:"gett",imp:"ge"},
+    {inf:"att hjälpa",es:"ayudar",grp:2,presens:"hjälper",pret:"hjälpte",sup:"hjälpt",imp:"hjälp"},
+    {inf:"att börja",es:"empezar",grp:1,presens:"börjar",pret:"började",sup:"börjat",imp:"börja"},
+    {inf:"att sluta",es:"terminar/dejar",grp:1,presens:"slutar",pret:"slutade",sup:"slutat",imp:"sluta"},
+    {inf:"att betala",es:"pagar",grp:1,presens:"betalar",pret:"betalade",sup:"betalat",imp:"betala"},
+    {inf:"att fråga",es:"preguntar",grp:1,presens:"frågar",pret:"frågade",sup:"frågat",imp:"fråga"},
+    {inf:"att svara",es:"responder",grp:1,presens:"svarar",pret:"svarade",sup:"svarat",imp:"svara"},
+    {inf:"att resa",es:"viajar",grp:2,presens:"reser",pret:"reste",sup:"rest",imp:"res"},
+    {inf:"att köra",es:"conducir",grp:2,presens:"kör",pret:"körde",sup:"kört",imp:"kör"},
+    {inf:"att springa",es:"correr",grp:4,presens:"springer",pret:"sprang",sup:"sprungit",imp:"spring"},
+    {inf:"att bli",es:"llegar a ser/ponerse",grp:4,presens:"blir",pret:"blev",sup:"blivit",imp:"bli"},
+    {inf:"att stå",es:"estar de pie",grp:4,presens:"står",pret:"stod",sup:"stått",imp:"stå"},
+    {inf:"att vara",es:"ser/estar",grp:4,presens:"är",pret:"var",sup:"varit",imp:"var"},
+  ]
+};
+
+const SENTENCES=[
+  {sv:"Jag ___ svenska varje dag.",opts:["pluggar","pluggade","pluggat"],answer:0,es:"Estudio sueco cada día."},
+  {sv:"Igår ___ vi på restaurang.",opts:["äter","åt","ätit"],answer:1,es:"Ayer comimos en un restaurante."},
+  {sv:"Har du ___ den boken?",opts:["läser","läste","läst"],answer:2,es:"¿Has leído ese libro?"},
+  {sv:"Hon ___ till jobbet klockan åtta.",opts:["går","gick","gått"],answer:0,es:"Ella va al trabajo a las ocho."},
+  {sv:"Vi ___ ett hotell förra veckan.",opts:["bokar","bokade","bokat"],answer:1,es:"Reservamos un hotel la semana pasada."},
+  {sv:"Jag har ___ i Sverige i två år.",opts:["bor","bodde","bott"],answer:2,es:"He vivido en Suecia dos años."},
+  {sv:"Kan du ___ mig?",opts:["hjälper","hjälpa","hjälpte"],answer:1,es:"¿Puedes ayudarme?"},
+  {sv:"Det ___ mycket igår.",opts:["regnar","regnade","regnat"],answer:1,es:"Llovió mucho ayer."},
+  {sv:"Jag ska ___ mat ikväll.",opts:["lagar","laga","lagade"],answer:1,es:"Voy a cocinar esta noche."},
+  {sv:"De ___ redan hem.",opts:["åker","åkte","åkt"],answer:1,es:"Ya se fueron a casa."},
+  {sv:"Vill du ___ en kopp kaffe?",opts:["dricker","dricka","drack"],answer:1,es:"¿Quieres beber una taza de café?"},
+  {sv:"Jag ___ dig imorgon.",opts:["ringer","ringde","ringt"],answer:0,es:"Te llamo mañana."},
+  {sv:"Hon ___ en bok nu.",opts:["läser","läste","läst"],answer:0,es:"Ella lee un libro ahora."},
+  {sv:"Vi ___ i Spanien förra året.",opts:["bor","bodde","bott"],answer:1,es:"Vivíamos en España el año pasado."},
+  {sv:"Har du ___ frukost?",opts:["äter","åt","ätit"],answer:2,es:"¿Has desayunado?"},
+  {sv:"Jag vill ___ en kaffe.",opts:["dricker","dricka","drack"],answer:1,es:"Quiero beber un café."},
+  {sv:"De ___ till Sverige nästa vecka.",opts:["reser","reste","rest"],answer:0,es:"Viajan a Suecia la próxima semana."},
+  {sv:"Igår ___ jag hemma hela dagen.",opts:["är","var","varit"],answer:1,es:"Ayer estuve en casa todo el día."},
+  {sv:"Det är ___ hus.",opts:["en","ett","den"],answer:1,es:"Es una casa."},
+  {sv:"Jag har ___ bil.",opts:["en","ett","den"],answer:0,es:"Tengo un coche."},
+  {sv:"Var är ___? (el gato)",opts:["katt","katten","en katt"],answer:1,es:"¿Dónde está el gato?"},
+  {sv:"Jag ser ___ varje dag. (a ella)",opts:["hon","henne","hennes"],answer:1,es:"La veo cada día."},
+  {sv:"Det är ___ bok.",opts:["min","mitt","mina"],answer:0,es:"Es mi libro."},
+  {sv:"Det är ___ äpple.",opts:["min","mitt","mina"],answer:1,es:"Es mi manzana."},
+  {sv:"Jag bor ___ Stockholm.",opts:["i","på","till"],answer:0,es:"Vivo en Estocolmo."},
+  {sv:"Vi åker ___ jobbet nu.",opts:["i","till","från"],answer:1,es:"Vamos al trabajo ahora."},
+  {sv:"Boken ligger ___ bordet.",opts:["på","i","till"],answer:0,es:"El libro está sobre la mesa."},
+  {sv:"Jag dricker kaffe ___ mjölk.",opts:["med","på","för"],answer:0,es:"Bebo café con leche."},
+  {sv:"Han ___ komma idag.",opts:["kan inte","inte kan","kan"],answer:0,es:"No puede venir hoy."},
+  {sv:"___ heter du?",opts:["Vad","Var","Vem"],answer:0,es:"¿Cómo te llamas?"},
+  {sv:"___ bor du?",opts:["Vad","Var","När"],answer:1,es:"¿Dónde vives?"},
+  {sv:"___ kommer bussen?",opts:["Vad","När","Vem"],answer:1,es:"¿Cuándo viene el autobús?"},
+  {sv:"___ är det där?",opts:["Vem","Var","Hur"],answer:0,es:"¿Quién es ese?"},
+  {sv:"Huset är ___.",opts:["stor","stort","stora"],answer:1,es:"La casa es grande."},
+  {sv:"Bilen är ___.",opts:["röd","rött","röda"],answer:0,es:"El coche es rojo."},
+  {sv:"Det är ___ äpplen.",opts:["gröna","grön","grönt"],answer:0,es:"Son manzanas verdes."},
+  {sv:"Jag har två ___.",opts:["hund","hundar","hunden"],answer:1,es:"Tengo dos perros."},
+  {sv:"Vi ___ fotboll varje helg.",opts:["spelar","spelade","spelat"],answer:0,es:"Jugamos al fútbol cada finde."},
+  {sv:"Hon ___ mig igår kväll.",opts:["ringer","ringde","ringt"],answer:1,es:"Me llamó anoche."},
+  {sv:"Kan du ___ mig?",opts:["hjälper","hjälpa","hjälpte"],answer:1,es:"¿Puedes ayudarme?"},
+  {sv:"Jag måste ___ nu.",opts:["går","gå","gick"],answer:1,es:"Tengo que irme ahora."},
+  {sv:"De har ___ en ny lägenhet.",opts:["köper","köpa","köpt"],answer:2,es:"Han comprado un piso nuevo."},
+  {sv:"På morgonen ___ jag kaffe.",opts:["dricker","jag dricker","drack"],answer:0,es:"Por la mañana bebo café."},
+  {sv:"Imorgon ___ vi till stranden.",opts:["åker","vi åker","åkte"],answer:0,es:"Mañana vamos a la playa."},
+  {sv:"Jag tycker ___ att läsa.",opts:["om","på","till"],answer:0,es:"Me gusta leer."},
+  {sv:"Vänta ___ mig!",opts:["på","i","med"],answer:0,es:"¡Espérame!"},
+  {sv:"Jag är intresserad ___ musik.",opts:["av","på","i"],answer:0,es:"Me interesa la música."},
+  {sv:"Tack ___ hjälpen!",opts:["för","på","av"],answer:0,es:"¡Gracias por la ayuda!"},
+  {sv:"Vi ses ___ måndag.",opts:["på","i","till"],answer:0,es:"Nos vemos el lunes."},
+  {sv:"Hon kommer ___ Italien.",opts:["från","av","med"],answer:0,es:"Ella viene de Italia."},
+  {sv:"Jag ___ trött igår.",opts:["är","var","varit"],answer:1,es:"Estaba cansado ayer."},
+  {sv:"Barnen ___ i parken nu.",opts:["leker","lekte","lekt"],answer:0,es:"Los niños juegan en el parque ahora."},
+  {sv:"Jag har ___ i tre timmar.",opts:["sover","sov","sovit"],answer:2,es:"He dormido tres horas."},
+  {sv:"Vi ___ en film igår.",opts:["ser","såg","sett"],answer:1,es:"Vimos una película ayer."},
+  {sv:"Kan jag ___ ett glas vatten?",opts:["få","får","fick"],answer:0,es:"¿Puedo tomar un vaso de agua?"},
+  {sv:"Hon är ___ än jag.",opts:["lång","längre","längst"],answer:1,es:"Ella es más alta que yo."},
+  {sv:"Det här är ___ boken.",opts:["bra","bättre","bästa"],answer:2,es:"Este es el mejor libro."},
+  {sv:"Jag gillar ___ hund.",opts:["din","ditt","dina"],answer:0,es:"Me gusta tu perro."},
+  {sv:"___ gör du imorgon?",opts:["Vad","Var","Vem"],answer:0,es:"¿Qué haces mañana?"},
+  {sv:"Jag förstår ___ svenska.",opts:["inte","ingen","inga"],answer:0,es:"No entiendo sueco."},
+];
+
+/* ===================== FRASER (meningar vardag) ===================== */
+const PHRASES=[
+  {sv:"Hur mår du?",es:"¿Cómo estás?",lvl:"A1"},
+  {sv:"Jag heter Anna.",es:"Me llamo Anna.",lvl:"A1"},
+  {sv:"Varifrån kommer du?",es:"¿De dónde eres?",lvl:"A1"},
+  {sv:"Jag förstår inte.",es:"No entiendo.",lvl:"A1"},
+  {sv:"Kan du prata långsammare?",es:"¿Puedes hablar más despacio?",lvl:"A1"},
+  {sv:"Vad kostar det?",es:"¿Cuánto cuesta?",lvl:"A1"},
+  {sv:"Var ligger toaletten?",es:"¿Dónde está el baño?",lvl:"A1"},
+  {sv:"Jag skulle vilja ha en kaffe.",es:"Querría un café.",lvl:"A1"},
+  {sv:"Tack för hjälpen!",es:"¡Gracias por la ayuda!",lvl:"A1"},
+  {sv:"Vi ses imorgon.",es:"Nos vemos mañana.",lvl:"A1"},
+  {sv:"Jag kommer från Spanien.",es:"Soy de España.",lvl:"A1"},
+  {sv:"Talar du engelska?",es:"¿Hablas inglés?",lvl:"A1"},
+  {sv:"Jag har bott här i två år.",es:"He vivido aquí dos años.",lvl:"A2"},
+  {sv:"Kan du hjälpa mig med det här?",es:"¿Puedes ayudarme con esto?",lvl:"A2"},
+  {sv:"Jag tycker om att resa.",es:"Me gusta viajar.",lvl:"A2"},
+  {sv:"Det beror på vädret.",es:"Depende del tiempo.",lvl:"A2"},
+  {sv:"Vi borde träffas snart.",es:"Deberíamos vernos pronto.",lvl:"A2"},
+  {sv:"Jag håller med dig.",es:"Estoy de acuerdo contigo.",lvl:"A2"},
+  {sv:"Det var längesen!",es:"¡Cuánto tiempo!",lvl:"A2"},
+  {sv:"Jag är trött på att vänta.",es:"Estoy cansado de esperar.",lvl:"A2"},
+  {sv:"Skulle du kunna skicka saltet?",es:"¿Podrías pasarme la sal?",lvl:"A2"},
+  {sv:"Jag vet inte riktigt.",es:"No sé muy bien.",lvl:"A2"},
+  {sv:"Om jag hade tid skulle jag läsa mer.",es:"Si tuviera tiempo, leería más.",lvl:"B1"},
+  {sv:"Det hade varit bättre att boka i förväg.",es:"Habría sido mejor reservar con antelación.",lvl:"B1"},
+  {sv:"Trots att det regnade gick vi ut.",es:"Aunque llovía, salimos.",lvl:"B1"},
+  {sv:"Jag undrar om du skulle kunna hjälpa mig.",es:"Me pregunto si podrías ayudarme.",lvl:"B1"},
+  {sv:"Ju mer jag övar, desto bättre blir jag.",es:"Cuanto más practico, mejor me vuelvo.",lvl:"B1"},
+  {sv:"Det känns som om tiden går för fort.",es:"Siento como si el tiempo pasara muy rápido.",lvl:"B1"},
+  {sv:"Hade jag vetat det, skulle jag ha agerat annorlunda.",es:"De haberlo sabido, habría actuado distinto.",lvl:"B2"},
+  {sv:"Det är inte bara dyrt utan också onödigt.",es:"No solo es caro sino también innecesario.",lvl:"B2"},
+  {sv:"Såvitt jag vet är mötet inställt.",es:"Por lo que sé, la reunión está cancelada.",lvl:"B2"},
+  {sv:"Man bör ta hänsyn till olika faktorer.",es:"Hay que tener en cuenta varios factores.",lvl:"B2"},
+  {sv:"Frågan är betydligt mer komplicerad än så.",es:"El asunto es bastante más complicado que eso.",lvl:"C1"},
+  {sv:"Allt annat lika vore det en rimlig lösning.",es:"En igualdad de condiciones, sería una solución razonable.",lvl:"C1"},
+  {sv:"God morgon!",es:"¡Buenos días!",lvl:"A1"},
+  {sv:"God natt!",es:"¡Buenas noches!",lvl:"A1"},
+  {sv:"Hur gammal är du?",es:"¿Cuántos años tienes?",lvl:"A1"},
+  {sv:"Jag är tjugo år.",es:"Tengo veinte años.",lvl:"A1"},
+  {sv:"Vad gör du?",es:"¿Qué haces?",lvl:"A1"},
+  {sv:"Jag vet inte.",es:"No lo sé.",lvl:"A1"},
+  {sv:"Ursäkta, var ligger stationen?",es:"Perdona, ¿dónde está la estación?",lvl:"A1"},
+  {sv:"Hur mycket är klockan?",es:"¿Qué hora es?",lvl:"A1"},
+  {sv:"Klockan är tre.",es:"Son las tres.",lvl:"A1"},
+  {sv:"Jag är hungrig.",es:"Tengo hambre.",lvl:"A1"},
+  {sv:"Jag är törstig.",es:"Tengo sed.",lvl:"A1"},
+  {sv:"Smaklig måltid!",es:"¡Buen provecho!",lvl:"A1"},
+  {sv:"Vi ses senare.",es:"Nos vemos luego.",lvl:"A1"},
+  {sv:"Lycka till!",es:"¡Buena suerte!",lvl:"A1"},
+  {sv:"Trevligt att träffas.",es:"Encantado de conocerte.",lvl:"A1"},
+  {sv:"Jag kommer strax.",es:"Vuelvo enseguida.",lvl:"A1"},
+  {sv:"Kan jag få notan, tack?",es:"¿Me trae la cuenta, por favor?",lvl:"A1"},
+  {sv:"En biljett, tack.",es:"Un billete, por favor.",lvl:"A1"},
+  {sv:"Jag förstår lite svenska.",es:"Entiendo un poco de sueco.",lvl:"A1"},
+  {sv:"Talar du spanska?",es:"¿Hablas español?",lvl:"A1"},
+  {sv:"Vad betyder det?",es:"¿Qué significa eso?",lvl:"A1"},
+  {sv:"Hur stavar man det?",es:"¿Cómo se escribe?",lvl:"A1"},
+  {sv:"Var är närmaste apotek?",es:"¿Dónde está la farmacia más cercana?",lvl:"A1"},
+  {sv:"Jag skulle vilja boka ett bord.",es:"Querría reservar una mesa.",lvl:"A2"},
+  {sv:"Kan du rekommendera något?",es:"¿Puedes recomendar algo?",lvl:"A2"},
+  {sv:"Jag letar efter en present.",es:"Busco un regalo.",lvl:"A2"},
+  {sv:"Det passar bra.",es:"Me viene bien.",lvl:"A2"},
+  {sv:"Jag håller inte med.",es:"No estoy de acuerdo.",lvl:"A2"},
+  {sv:"Vad tycker du om det?",es:"¿Qué opinas de eso?",lvl:"A2"},
+  {sv:"Jag är inte säker.",es:"No estoy seguro.",lvl:"A2"},
+  {sv:"Det spelar ingen roll.",es:"Da igual.",lvl:"A2"},
+  {sv:"Jag har bråttom.",es:"Tengo prisa.",lvl:"A2"},
+  {sv:"Kan vi ta en paus?",es:"¿Podemos hacer una pausa?",lvl:"A2"},
+  {sv:"Jag mår inte så bra idag.",es:"No me encuentro muy bien hoy.",lvl:"A2"},
+  {sv:"Grattis på födelsedagen!",es:"¡Feliz cumpleaños!",lvl:"A2"},
+  {sv:"Vi hörs snart.",es:"Hablamos pronto.",lvl:"A2"},
+  {sv:"Jag ska tänka på saken.",es:"Me lo pensaré.",lvl:"A2"},
+  {sv:"Det låter kul!",es:"¡Suena divertido!",lvl:"A2"},
+  {sv:"Ha en trevlig dag!",es:"¡Que tengas un buen día!",lvl:"A2"},
+  {sv:"Hur var din helg?",es:"¿Qué tal tu fin de semana?",lvl:"A2"},
+  {sv:"Jag jobbar hemifrån idag.",es:"Hoy trabajo desde casa.",lvl:"A2"},
+  {sv:"Kan du säga det igen?",es:"¿Puedes repetirlo?",lvl:"A2"},
+  {sv:"Det gör inget.",es:"No pasa nada.",lvl:"A2"},
+  {sv:"Vad kul att se dig!",es:"¡Qué bien verte!",lvl:"A2"},
+  {sv:"Jag undrar vad det kostar.",es:"Me pregunto cuánto cuesta.",lvl:"A2"},
+  {sv:"Skulle du vilja följa med?",es:"¿Te gustaría venir?",lvl:"A2"},
+];
+
+/* ===================== LÄSNING (reading per nivå) ===================== */
+const TEXTS=[
+  {lvl:"A1",title:"En vanlig dag",sv:"Hej! Jag heter Erik. Jag bor i Göteborg med min katt. På morgonen dricker jag kaffe och läser nyheterna. Sedan cyklar jag till jobbet. Jag jobbar på ett litet kafé. På kvällen lagar jag mat och ser på tv.",
+    es:"¡Hola! Me llamo Erik. Vivo en Gotemburgo con mi gato. Por la mañana bebo café y leo las noticias. Luego voy en bici al trabajo. Trabajo en una cafetería pequeña. Por la noche cocino y veo la tele.",
+    questions:[{q:"Var bor Erik?",opts:["I Stockholm","I Göteborg","I Malmö"],answer:1},{q:"Hur tar han sig till jobbet?",opts:["Med bil","Med buss","Med cykel"],answer:2},{q:"Vad gör han på kvällen?",opts:["Lagar mat","Spelar fotboll","Pluggar"],answer:0}]},
+  {lvl:"A2",title:"En resa till fjällen",sv:"Förra vintern reste vi till fjällen i norra Sverige. Det var mycket kallt, men naturen var fantastisk. Vi bodde i en liten stuga nära en sjö. På dagarna åkte vi skidor och på kvällarna satt vi vid brasan. En kväll såg vi till och med norrsken. Det var en oförglömlig resa.",
+    es:"El invierno pasado viajamos a las montañas del norte de Suecia. Hacía mucho frío, pero la naturaleza era fantástica. Nos alojamos en una cabaña pequeña cerca de un lago. De día esquiábamos y por las noches nos sentábamos junto al fuego. Una noche incluso vimos auroras boreales. Fue un viaje inolvidable.",
+    questions:[{q:"När reste de?",opts:["Förra sommaren","Förra vintern","Förra hösten"],answer:1},{q:"Var bodde de?",opts:["På hotell","I en stuga","I ett tält"],answer:1},{q:"Vad såg de en kväll?",opts:["Norrsken","En björn","En storm"],answer:0}]},
+  {lvl:"B1",title:"Att flytta utomlands",sv:"När jag bestämde mig för att flytta utomlands var jag både nervös och glad. Det svåraste var inte språket, utan att hitta en lägenhet och förstå alla regler. Efter några månader kände jag mig mycket mer hemma. Jag insåg att det bästa sättet att lära sig ett nytt land är att våga göra misstag.",
+    es:"Cuando decidí mudarme al extranjero estaba nervioso y contento a la vez. Lo más difícil no fue el idioma, sino encontrar piso y entender todas las normas. Tras unos meses me sentí mucho más en casa. Me di cuenta de que la mejor forma de conocer un país nuevo es atreverse a cometer errores.",
+    questions:[{q:"Vad var svårast enligt texten?",opts:["Språket","Lägenhet och regler","Vädret"],answer:1},{q:"Hur kände hen sig efter några månader?",opts:["Mer hemma","Ännu mer nervös","Besviken"],answer:0},{q:"Vad är bästa sättet att lära sig?",opts:["Att plugga grammatik","Att våga göra misstag","Att resa hem"],answer:1}]},
+  {lvl:"B2",title:"Distansarbete",sv:"Distansarbete har blivit allt vanligare de senaste åren. Fördelarna är tydliga: man slipper pendla och kan planera sin dag friare. Samtidigt finns det nackdelar, eftersom gränsen mellan arbete och fritid lätt suddas ut. Många menar att en kombination av kontor och hemmajobb är den bästa lösningen.",
+    es:"El teletrabajo se ha vuelto cada vez más común en los últimos años. Las ventajas son claras: evitas desplazarte y puedes planificar tu día con más libertad. Al mismo tiempo hay desventajas, porque el límite entre trabajo y tiempo libre se difumina con facilidad. Muchos opinan que una combinación de oficina y trabajo en casa es la mejor solución.",
+    questions:[{q:"Vad är en fördel med distansarbete?",opts:["Man slipper pendla","Mer lön","Fler möten"],answer:0},{q:"Vad är en nackdel?",opts:["Sämre internet","Gränsen suddas ut","För tyst"],answer:1},{q:"Vilken lösning föredrar många?",opts:["Bara kontor","Bara hemma","En kombination"],answer:2}]},
+  {lvl:"A1",title:"Min familj",sv:"Jag heter Sara och jag har en stor familj. Min mamma heter Lena och min pappa heter Johan. Jag har en bror och en syster. Min bror är tio år och min syster är sju. Vi har också en hund som heter Bosse. På helgerna äter vi middag tillsammans.",
+    es:"Me llamo Sara y tengo una familia grande. Mi madre se llama Lena y mi padre Johan. Tengo un hermano y una hermana. Mi hermano tiene diez años y mi hermana siete. También tenemos un perro que se llama Bosse. Los fines de semana cenamos juntos.",
+    questions:[{q:"Hur många syskon har Sara?",opts:["Ett","Två","Tre"],answer:1},{q:"Vad heter hunden?",opts:["Bosse","Johan","Lena"],answer:0},{q:"Hur gammal är systern?",opts:["Sju","Tio","Tolv"],answer:0}]},
+  {lvl:"A1",title:"I affären",sv:"Idag går jag till affären. Jag behöver köpa mjölk, bröd och äpplen. Affären ligger nära mitt hus. Mjölken kostar tolv kronor och brödet kostar tjugo. Jag betalar med kort. Sedan går jag hem och lagar lunch.",
+    es:"Hoy voy a la tienda. Necesito comprar leche, pan y manzanas. La tienda está cerca de mi casa. La leche cuesta doce coronas y el pan veinte. Pago con tarjeta. Luego voy a casa y preparo el almuerzo.",
+    questions:[{q:"Vad köper hen INTE?",opts:["Mjölk","Bröd","Kaffe"],answer:2},{q:"Hur betalar hen?",opts:["Med kort","Kontant","Med telefon"],answer:0},{q:"Var ligger affären?",opts:["Långt bort","Nära huset","I centrum"],answer:1}]},
+  {lvl:"A2",title:"En helg i Stockholm",sv:"Förra helgen åkte jag och min vän till Stockholm. Vi tog tåget på fredagen. På lördagen gick vi runt i Gamla stan och tittade på de gamla husen. Vi åt lunch på ett mysigt kafé. På söndagen regnade det, så vi gick på museum istället. Det var en riktigt trevlig helg.",
+    es:"El finde pasado mi amigo y yo fuimos a Estocolmo. Cogimos el tren el viernes. El sábado paseamos por el casco antiguo y vimos las casas antiguas. Comimos en una cafetería acogedora. El domingo llovió, así que fuimos al museo. Fue un finde muy agradable.",
+    questions:[{q:"När åkte de?",opts:["På fredagen","På lördagen","På söndagen"],answer:0},{q:"Varför gick de på museum?",opts:["Det regnade","Det var gratis","De var trötta"],answer:0},{q:"Var åt de lunch?",opts:["Hemma","På ett kafé","På tåget"],answer:1}]},
+  {lvl:"A2",title:"Mitt husdjur",sv:"Jag har en katt som heter Måns. Han är tre år gammal och väldigt lat. På morgonen vill han ha mat direkt. Sedan sover han nästan hela dagen i soffan. På kvällen blir han plötsligt pigg och vill leka. Jag älskar honom, även om han ibland är lite jobbig.",
+    es:"Tengo un gato que se llama Måns. Tiene tres años y es muy vago. Por la mañana quiere comida enseguida. Luego duerme casi todo el día en el sofá. Por la noche se despierta de repente y quiere jugar. Lo quiero, aunque a veces es un poco pesado.",
+    questions:[{q:"Hur gammal är katten?",opts:["Tre år","Fem år","Ett år"],answer:0},{q:"Vad gör katten på dagen?",opts:["Leker","Sover","Äter"],answer:1},{q:"När vill katten leka?",opts:["På morgonen","På kvällen","På natten"],answer:1}]},
+  {lvl:"B1",title:"Att lära sig ett språk",sv:"Många tror att man måste ha talang för att lära sig ett språk, men det stämmer inte riktigt. Det viktigaste är att öva lite varje dag och att inte vara rädd för att prata. I början gör alla misstag, och det är helt normalt. Ju mer man använder språket i verkliga situationer, desto snabbare går det. Tålamod är nyckeln.",
+    es:"Mucha gente cree que hace falta talento para aprender un idioma, pero no es del todo cierto. Lo más importante es practicar un poco cada día y no tener miedo a hablar. Al principio todos cometen errores, y es totalmente normal. Cuanto más usas el idioma en situaciones reales, más rápido avanzas. La paciencia es la clave.",
+    questions:[{q:"Vad är viktigast enligt texten?",opts:["Talang","Öva varje dag","Grammatik"],answer:1},{q:"Vad säger texten om misstag?",opts:["Undvik dem","De är normala","De är pinsamma"],answer:1},{q:"Vad är nyckeln?",opts:["Tålamod","Pengar","Talang"],answer:0}]},
+];
+
+/* ===================== GRAMMATIK ===================== */
+const GRAMMAR=[
+  {id:"pronomen",icon:"🙋",title:"Pronomen",es:"Pronombres",
+   lesson:"<b>Sujeto:</b> jag, du, han, hon, den/det, vi, ni, de.<br><b>Objeto:</b> mig, dig, honom, henne, den/det, oss, er, dem.<br><b>Posesivos:</b> min/mitt/mina, din/ditt/dina, hans, hennes, vår/vårt/våra, er/ert/era, deras.<br><b>Reflexivo:</b> sig (tvätta sig).<br>💡 El posesivo concuerda con el objeto poseído: <i>min bok, mitt hus, mina böcker</i>.",
+   drills:[
+     {sv:"Jag ser ___ varje dag.",es:"Lo veo cada día (a él).",opts:["han","honom","hans"],answer:1},
+     {sv:"Det är ___ bok.",es:"Es mi libro.",opts:["min","mitt","mina"],answer:0},
+     {sv:"Det är ___ hus.",es:"Es mi casa.",opts:["min","mitt","mina"],answer:1},
+     {sv:"Vi tvättar ___ innan maten.",es:"Nos lavamos antes de comer.",opts:["sig","oss","er"],answer:1},
+     {sv:"Känner du ___?",es:"¿La conoces (a ella)?",opts:["hon","henne","hennes"],answer:1},
+     {sv:"Det är ___ hund.",es:"Es su perro (de ellos).",opts:["sin","deras","sina"],answer:1},
+     {sv:"___ gillar kaffe.",es:"Yo tomo café (me gusta).",opts:["Jag","Mig","Min"],answer:0},
+     {sv:"Kan du hjälpa ___?",es:"¿Puedes ayudarnos?",opts:["vi","oss","vår"],answer:1},
+     {sv:"Det här är ___ barn.",es:"Es mi hijo/a.",opts:["min","mitt","mina"],answer:1},
+     {sv:"Var är ___ nycklar?",es:"¿Dónde están mis llaves?",opts:["min","mitt","mina"],answer:2},
+     {sv:"Jag ringer ___ ikväll.",es:"Te llamo esta noche (a ti).",opts:["du","dig","din"],answer:1},
+     {sv:"Det är ___ fel.",es:"Es su culpa (de él).",opts:["hans","honom","han"],answer:0},
+   ]},
+  {id:"enett",icon:"🔤",title:"En eller ett",es:"Artículos en/ett",
+   lesson:"Los sustantivos son <b>en-ord</b> (~75%) o <b>ett-ord</b>.<br><b>Indefinido:</b> en bok, ett hus.<br><b>Definido</b> (el/la): bok→<b>boken</b>, hus→<b>huset</b>.<br><b>Plural def.:</b> böcker→<b>böckerna</b>, hus→<b>husen</b>.<br>💡 Aprende cada palabra CON su artículo desde el principio.",
+   drills:[
+     {sv:"Jag har ___ bil.",es:"Tengo un coche.",opts:["en","ett"],answer:0},
+     {sv:"Det är ___ äpple.",es:"Es una manzana.",opts:["en","ett"],answer:1},
+     {sv:"Var är ___? (el libro)",es:"¿Dónde está el libro?",opts:["boken","bok","boket"],answer:0},
+     {sv:"Jag ser tre ___. (casas)",es:"Veo tres casas.",opts:["husen","hus","husar"],answer:1},
+     {sv:"___ är stängd. (la puerta, dörr)",es:"La puerta está cerrada.",opts:["Dörren","Dörret","En dörr"],answer:0},
+     {sv:"Jag köpte ___ äpple.",es:"Compré una manzana.",opts:["en","ett"],answer:1},
+     {sv:"Vi bor i ___ hus.",es:"Vivimos en una casa.",opts:["en","ett"],answer:1},
+     {sv:"Han har ___ hund.",es:"Tiene un perro.",opts:["en","ett"],answer:0},
+     {sv:"Var är ___? (el coche, bil)",es:"¿Dónde está el coche?",opts:["bilen","bilet","en bil"],answer:0},
+     {sv:"Jag ser många ___. (niños, barn)",es:"Veo muchos niños.",opts:["barnen","barn","barnar"],answer:1},
+     {sv:"___ kostar mycket. (la casa, hus)",es:"La casa cuesta mucho.",opts:["Huset","Husen","Hus"],answer:0},
+   ]},
+  {id:"ordfoljd",icon:"🔀",title:"Ordföljd (V2)",es:"Orden de palabras",
+   lesson:"Regla de oro: en frases principales el <b>verbo va siempre en 2ª posición</b>.<br>Si empiezas por algo que no es el sujeto (tiempo, lugar), el sujeto va <b>detrás</b> del verbo (inversión):<br><i>Imorgon <b>åker</b> jag till Stockholm.</i> (no «Imorgon jag åker»)<br><i>På helgen <b>spelar</b> jag fotboll.</i>",
+   drills:[
+     {sv:"Imorgon ___ till Stockholm.",es:"Mañana voy a Estocolmo.",opts:["jag åker","åker jag"],answer:1},
+     {sv:"På helgen ___ fotboll.",es:"El finde juego al fútbol.",opts:["spelar jag","jag spelar"],answer:0},
+     {sv:"Igår ___ hemma hela dagen.",es:"Ayer estuve en casa todo el día.",opts:["jag var","var jag"],answer:1},
+     {sv:"Nu ___ vi börja.",es:"Ahora debemos empezar.",opts:["måste","vi måste"],answer:0},
+     {sv:"På sommaren ___ till stranden.",es:"En verano vamos a la playa.",opts:["åker vi","vi åker"],answer:0},
+     {sv:"Varje dag ___ kaffe.",es:"Cada día bebo café.",opts:["dricker jag","jag dricker"],answer:0},
+     {sv:"Klockan åtta ___ jobbet.",es:"A las ocho empiezo el trabajo.",opts:["börjar","jag börjar"],answer:0},
+     {sv:"Ibland ___ på bio.",es:"A veces vamos al cine.",opts:["går vi","vi går"],answer:0},
+   ]},
+  {id:"negation",icon:"🚫",title:"Negation (inte)",es:"La negación «inte»",
+   lesson:"En frases principales, <b>inte va DESPUÉS del verbo</b>:<br><i>Jag <b>förstår inte</b>.</i> · <i>Jag <b>kan inte</b> komma.</i><br>En frases subordinadas (att, för att, när, som…) <b>inte va ANTES del verbo</b>:<br><i>Han sa att han <b>inte kunde</b> komma.</i>",
+   drills:[
+     {sv:"Jag ___ kaffe.",es:"No bebo café.",opts:["dricker inte","inte dricker"],answer:0},
+     {sv:"Han sa att han ___ komma.",es:"Dijo que no podía venir.",opts:["kunde inte","inte kunde"],answer:1},
+     {sv:"Vi ___ igår.",es:"No trabajamos ayer.",opts:["jobbade inte","inte jobbade"],answer:0},
+     {sv:"Jag vet att du ___ gillar fisk.",es:"Sé que no te gusta el pescado.",opts:["gillar inte","inte gillar"],answer:1},
+     {sv:"Hon ___ hemma idag.",es:"Hoy no está en casa.",opts:["är inte","inte är"],answer:0},
+     {sv:"Jag ___ förstå frågan.",es:"No puedo entender la pregunta.",opts:["kan inte","inte kan"],answer:0},
+     {sv:"Han sa att han ___ hungrig.",es:"Dijo que no tenía hambre.",opts:["var inte","inte var"],answer:1},
+     {sv:"Vi ___ tid just nu.",es:"No tenemos tiempo ahora mismo.",opts:["har inte","inte har"],answer:0},
+   ]},
+  {id:"prepositioner",icon:"📍",title:"Prepositioner",es:"Preposiciones",
+   lesson:"Las más comunes: <b>på</b> (en/sobre), <b>i</b> (en), <b>till</b> (a/hacia), <b>från</b> (de/desde), <b>med</b> (con), <b>för</b> (para/por), <b>hos</b> (en casa de), <b>vid</b> (junto a).<br>💡 Muchas expresiones son fijas: <i>gå <b>på</b> bio, åka <b>till</b> jobbet, bo <b>i</b> stan</i>.",
+   drills:[
+     {sv:"Jag bor ___ Madrid.",es:"Vivo en Madrid.",opts:["i","på","till"],answer:0},
+     {sv:"Vi går ___ bio ikväll.",es:"Vamos al cine esta noche.",opts:["i","på","till"],answer:1},
+     {sv:"Jag kommer ___ Spanien.",es:"Vengo de España.",opts:["från","med","för"],answer:0},
+     {sv:"Kaffe ___ mjölk, tack.",es:"Café con leche, por favor.",opts:["med","på","i"],answer:0},
+     {sv:"Vi åker ___ jobbet nu.",es:"Vamos al trabajo ahora.",opts:["i","till","hos"],answer:1},
+     {sv:"Jag väntar ___ bussen.",es:"Espero el autobús.",opts:["på","i","till"],answer:0},
+     {sv:"Presenten är ___ dig.",es:"El regalo es para ti.",opts:["för","till","åt"],answer:1},
+     {sv:"Jag tycker ___ att dansa.",es:"Me gusta bailar.",opts:["om","på","för"],answer:0},
+     {sv:"Vi pratar ___ telefon.",es:"Hablamos por teléfono.",opts:["i","på","med"],answer:0},
+     {sv:"Katten sitter ___ bordet.",es:"El gato está debajo de la mesa.",opts:["under","på","i"],answer:0},
+     {sv:"Jag bor ___ min familj.",es:"Vivo con mi familia.",opts:["med","hos","på"],answer:0},
+   ]},
+  {id:"fragor",icon:"❓",title:"Frågeord",es:"Interrogativos",
+   lesson:"Las palabras para preguntar: <b>vad</b> (qué), <b>var</b> (dónde), <b>vart</b> (adónde), <b>vem</b> (quién), <b>vems</b> (de quién), <b>när</b> (cuándo), <b>hur</b> (cómo), <b>varför</b> (por qué), <b>vilken/vilket/vilka</b> (cuál/cuáles).<br>💡 Tras la palabra interrogativa, el verbo va justo después: <i>Var <b>bor</b> du?</i>",
+   drills:[
+     {sv:"___ heter du?",es:"¿Cómo te llamas?",opts:["Vad","Var","Vem"],answer:0},
+     {sv:"___ bor du?",es:"¿Dónde vives?",opts:["Var","Vart","När"],answer:0},
+     {sv:"___ är det?",es:"¿Quién es?",opts:["Vem","Vad","Hur"],answer:0},
+     {sv:"___ börjar filmen?",es:"¿Cuándo empieza la peli?",opts:["När","Var","Hur"],answer:0},
+     {sv:"___ mår du?",es:"¿Cómo estás?",opts:["Hur","Vad","Vem"],answer:0},
+     {sv:"___ är du sen?",es:"¿Por qué llegas tarde?",opts:["Varför","Vad","Var"],answer:0},
+     {sv:"___ bok vill du ha?",es:"¿Qué libro quieres?",opts:["Vilken","Vilket","Vilka"],answer:0},
+     {sv:"___ hus är ditt?",es:"¿Qué casa es la tuya?",opts:["Vilken","Vilket","Vilka"],answer:1},
+     {sv:"___ ska du?",es:"¿Adónde vas?",opts:["Vart","Var","När"],answer:0},
+   ]},
+  {id:"adjektiv",icon:"🎨",title:"Adjektiv",es:"Concordancia de adjetivos",
+   lesson:"El adjetivo cambia según el sustantivo:<br><b>en-ord:</b> en <b>stor</b> bil.<br><b>ett-ord:</b> ett <b>stort</b> hus (+t).<br><b>plural/definido:</b> <b>stora</b> bilar, den <b>stora</b> bilen (+a).<br>💡 Regla rápida: en→(nada), ett→+t, plural/bestämd→+a.",
+   drills:[
+     {sv:"En ___ bil.",es:"Un coche rojo.",opts:["röd","rött","röda"],answer:0},
+     {sv:"Ett ___ hus.",es:"Una casa roja.",opts:["röd","rött","röda"],answer:1},
+     {sv:"Två ___ bilar.",es:"Dos coches rojos.",opts:["röd","rött","röda"],answer:2},
+     {sv:"En ___ hund.",es:"Un perro grande.",opts:["stor","stort","stora"],answer:0},
+     {sv:"Ett ___ bord.",es:"Una mesa grande.",opts:["stor","stort","stora"],answer:1},
+     {sv:"Den ___ hunden.",es:"El perro grande.",opts:["stor","stort","stora"],answer:2},
+     {sv:"Ett ___ äpple.",es:"Una manzana verde.",opts:["grön","grönt","gröna"],answer:1},
+     {sv:"Gamla ___. (casas, hus)",es:"Casas viejas.",opts:["hus","huset","husen"],answer:0},
+     {sv:"En ___ kaffe.",es:"Un café caliente.",opts:["varm","varmt","varma"],answer:0},
+   ]},
+];
+
+/* ===================== SKRIVNING (writing per nivå) ===================== */
+const WRITE=[
+  {lvl:"A1",prompt:"Preséntate en sueco: tu nombre, de dónde eres y qué idiomas hablas (2–3 frases).",model:"Hej! Jag heter Marco. Jag kommer från Spanien. Jag pratar spanska, engelska och lite svenska."},
+  {lvl:"A2",prompt:"Describe tu rutina diaria (3–4 frases con verbos en presente).",model:"Jag vaknar klockan sju. Sedan äter jag frukost och åker till jobbet. På kvällen lagar jag mat och vilar lite. Jag går och lägger mig vid elva."},
+  {lvl:"B1",prompt:"Escribe un correo corto pidiendo información sobre un curso de sueco (4–5 frases).",model:"Hej! Jag är intresserad av er svenskkurs. Skulle ni kunna berätta när kursen börjar och vad den kostar? Jag är nybörjare men vill lära mig snabbt. Tack på förhand! Vänliga hälsningar, Marco."},
+  {lvl:"B2",prompt:"Da tu opinión sobre el teletrabajo, con ventajas y desventajas (4–5 frases, usa conectores como däremot, dessutom, eftersom).",model:"Jag tycker att distansarbete har många fördelar. Man slipper pendla och kan planera sin dag friare. Däremot kan det vara svårt att skilja arbete från fritid, eftersom man alltid är hemma. Dessutom saknar man ibland kontakten med kollegor. Sammanfattningsvis fungerar en kombination bäst."},
+  {lvl:"C1",prompt:"Argumenta a favor o en contra de que el Estado financie los estudios universitarios (5–6 frases, registro formal).",model:"Att staten finansierar högre utbildning är enligt min mening en investering snarare än en kostnad. Ett tillgängligt utbildningssystem bidrar till ökad jämlikhet och en mer kvalificerad arbetskraft. Kritiker hävdar visserligen att det belastar statsbudgeten, men de långsiktiga vinsterna väger tyngre. Utan ekonomiska hinder kan fler utveckla sin fulla potential. Följaktligen anser jag att modellen bör värnas och utvecklas."},
+  {lvl:"A1",prompt:"Describe tu casa o piso (2–3 frases): cuántas habitaciones tiene y qué hay.",model:"Jag bor i en liten lägenhet. Den har ett kök, ett sovrum och ett vardagsrum. I vardagsrummet finns en soffa och en tv."},
+  {lvl:"A1",prompt:"Escribe qué comes normalmente en el desayuno (2–3 frases).",model:"På morgonen äter jag ofta en smörgås. Jag dricker kaffe med mjölk. Ibland äter jag också en frukt."},
+  {lvl:"A1",prompt:"Preséntate a un nuevo compañero (3 frases).",model:"Hej! Jag heter Carlos och jag kommer från Spanien. Jag är trettio år och jobbar som lärare. Jag lär mig svenska nu."},
+  {lvl:"A2",prompt:"Cuenta qué hiciste el fin de semana pasado (3–4 frases en pretérito).",model:"I helgen var jag hemma och vilade. På lördagen träffade jag mina vänner och vi åt på restaurang. På söndagen städade jag lägenheten och lagade mat. Det var en lugn helg."},
+  {lvl:"A2",prompt:"Escribe un mensaje a un amigo para quedar (3–4 frases).",model:"Hej! Hur mår du? Vill du ta en kaffe på lördag? Vi kan träffas klockan tre i centrum. Hör av dig!"},
+  {lvl:"A2",prompt:"Describe tu rutina de un día de trabajo (4 frases).",model:"Jag vaknar klockan sju och äter frukost. Sedan åker jag till jobbet med bussen. Jag jobbar till klockan fem. På kvällen tränar jag eller ser på tv."},
+  {lvl:"B1",prompt:"Describe tu ciudad y qué se puede hacer allí (4–5 frases).",model:"Jag bor i en medelstor stad i Spanien. Det finns många kaféer, parker och ett stort torg i centrum. På helgerna kan man gå på marknad eller ta en promenad vid floden. Staden är särskilt fin på sommaren. Jag trivs verkligen här."},
+  {lvl:"B1",prompt:"Explica por qué estudias sueco y cuáles son tus objetivos (4–5 frases).",model:"Jag studerar svenska eftersom jag vill flytta till Sverige i framtiden. Mitt mål är att kunna prata med människor i vardagen och kanske jobba där. Jag tycker att språket är vackert men lite svårt. Varje dag lär jag mig nya ord. Jag hoppas kunna nå en bra nivå inom ett år."},
+];
+
+/* ===================== PROFILER ===================== */
+const PKEY="lsb_profiles", DPREFIX="lsb_v2_", OLD="lsb_v1";
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function loadProfiles(){
+  let p=null; try{p=JSON.parse(localStorage.getItem(PKEY));}catch(e){}
+  if(!p||!p.list||!p.list.length){
+    const id=uid(); p={cur:id,list:[{id,name:"Jag",emoji:"🐻"}]};
+    try{ const old=localStorage.getItem(OLD); if(old) localStorage.setItem(DPREFIX+id,old); }catch(e){}
+    try{ localStorage.setItem(PKEY,JSON.stringify(p)); }catch(e){}
+  }
+  return p;
+}
+let PROF=loadProfiles();
+function saveProfiles(){ try{localStorage.setItem(PKEY,JSON.stringify(PROF));}catch(e){} }
+function curProfile(){ return PROF.list.find(x=>x.id===PROF.cur)||PROF.list[0]; }
+
+/* ===================== STATE ===================== */
+const LEVELS=["A1","A2","B1","B2","C1","C2"];
+const DEF_LEVELS={A1:true,A2:true,B1:true,B2:false,C1:false,C2:false};
+function fresh(){ return {mastery:{},streak:0,lastDay:null,totalReviews:0,verbScore:0,verbTries:0,theme:"light",srs:{},custom:{},active:{},xp:0,goal:15,today:null,badges:{},levels:{...DEF_LEVELS}}; }
+function loadState(){
+  try{ const s=JSON.parse(localStorage.getItem(DPREFIX+PROF.cur))||fresh();
+    s.custom=s.custom||{}; s.active=s.active||{}; s.srs=s.srs||{}; s.mastery=s.mastery||{};
+    s.xp=s.xp||0; s.goal=s.goal||15; s.badges=s.badges||{}; s.today=s.today||null;
+    s.levels=Object.assign({...DEF_LEVELS},s.levels||{});
+    return s;
+  }catch(e){ return fresh(); }
+}
+let S=loadState();
+function save(){ try{localStorage.setItem(DPREFIX+PROF.cur,JSON.stringify(S));}catch(e){} }
+function wordKey(cat,sv){ return cat+"::"+sv; }
+
+let VOCAB={};
+function buildVocab(){
+  const v={};
+  for(const k in BASE_VOCAB){ const b=BASE_VOCAB[k];
+    const words=b.words.concat(S.custom[k]||[]).map(w=>({...w,lvl:w.lvl||b.lvl||"A2",img:w.img||EMOJI[w.sv]||""}));
+    v[k]={title:b.title,es:b.es,icon:b.icon,lvl:b.lvl||"A2",words};
+  }
+  v.mina={title:"Mina ord",es:"Mis palabras",icon:"📌",custom:true,lvl:"A2",words:(S.custom.mina||[]).map(w=>({...w,lvl:w.lvl||"A2",img:w.img||EMOJI[w.sv]||""}))};
+  return v;
+}
+VOCAB=buildVocab();
+
+/* streak */
+(function(){ const today=new Date().toDateString();
+  if(S.lastDay!==today){ const y=new Date(Date.now()-864e5).toDateString();
+    S.streak=(S.lastDay===y)?S.streak+1:1; S.lastDay=today; save(); } })();
+
+/* ===================== HELPERS ===================== */
+const $=(s,r=document)=>r.querySelector(s);
+const view=$("#view");
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+let svVoice=null;
+function pickVoice(){ const vs=speechSynthesis.getVoices(); svVoice=vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith("sv"))||null; }
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
+function speak(txt){ if(!('speechSynthesis' in window))return toast("Ljud stöds inte här");
+  speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(String(txt).replace(/^att /,''));
+  u.lang="sv-SE"; if(svVoice)u.voice=svVoice; u.rate=.9; speechSynthesis.speak(u); }
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1600); }
+function levelOn(cat){ const c=VOCAB[cat]; if(!c)return false; if(c.custom)return true; return S.levels[c.lvl]!==false; }
+function isActive(cat){ return S.active[cat]!==false; }
+function studyable(cat){ return levelOn(cat)&&isActive(cat); }
+function allWords(){ const o=[]; for(const c in VOCAB) for(const w of VOCAB[c].words) o.push({...w,cat:c}); return o; }
+function activeWords(){ const o=[]; for(const c in VOCAB){ if(!studyable(c))continue; for(const w of VOCAB[c].words) o.push({...w,cat:c}); } return o; }
+function masteryOf(cat,sv){ return S.mastery[wordKey(cat,sv)]||0; }
+function catProgress(cat){ const ws=VOCAB[cat].words; if(!ws.length)return 0; let s=0; ws.forEach(w=>s+=masteryOf(cat,w.sv)); return Math.round(s/(ws.length*2)*100); }
+function totalLearned(){ let n=0; for(const k in S.mastery) if(S.mastery[k]>=2)n++; return n; }
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+function dueWords(){ const now=Date.now(),due=[]; for(const w of activeWords()){ const r=S.srs[wordKey(w.cat,w.sv)]; if(!r||r.next<=now)due.push(w); } return due; }
+function srsUpdate(cat,sv,ok){ const k=wordKey(cat,sv); const r=S.srs[k]||{box:0};
+  r.box=ok?Math.min(r.box+1,5):Math.max(r.box-1,0); r.next=Date.now()+[0,1,2,4,8,16][r.box]*864e5; S.srs[k]=r;
+  const cur=masteryOf(cat,sv); S.mastery[k]=ok?Math.min(cur+1,2):Math.max(cur-1,0); S.totalReviews++; save(); }
+
+/* XP / nivå / mål / märken */
+function levelOf(){ let xp=S.xp||0,lvl=1,need=60,acc=0; while(xp>=acc+need){acc+=need;lvl++;need=Math.round(need*1.35);} return {lvl,into:xp-acc,need,xp}; }
+function ensureToday(){ const t=new Date().toDateString(); if(!S.today||S.today.date!==t) S.today={date:t,count:0,words:[]}; }
+let goalJustHit=false;
+function award(ok,xp,word){ ensureToday(); const before=S.today.count; S.today.count++; S.xp=(S.xp||0)+(ok?xp:1);
+  if(ok&&word&&word.sv){ if(!S.today.words.some(w=>w.sv===word.sv&&w.cat===word.cat)) S.today.words.push({sv:word.sv,es:word.es,ex:word.ex,pos:word.pos,cat:word.cat,img:word.img||EMOJI[word.sv]||""}); }
+  if(before<S.goal&&S.today.count>=S.goal){ goalJustHit=true; setTimeout(()=>toast("🎯 Dagens mål klarat! +"+S.goal),250); }
+  checkBadges(); save(); }
+const BADGES=[
+  {id:"forsta",icon:"🌱",name:"Första ordet",cond:()=>totalLearned()>=1},
+  {id:"tio",icon:"🌿",name:"10 ord",cond:()=>totalLearned()>=10},
+  {id:"femtio",icon:"🌳",name:"50 ord",cond:()=>totalLearned()>=50},
+  {id:"hundraord",icon:"🌼",name:"100 ord",cond:()=>totalLearned()>=100},
+  {id:"vecka",icon:"🔥",name:"7 dagar",cond:()=>S.streak>=7},
+  {id:"hundra",icon:"💯",name:"100 reps",cond:()=>S.totalReviews>=100},
+  {id:"niva5",icon:"⭐",name:"Nivå 5",cond:()=>levelOf().lvl>=5},
+  {id:"mastare",icon:"🏅",name:"Tema 100%",cond:()=>Object.keys(VOCAB).some(c=>VOCAB[c].words.length&&catProgress(c)>=100)},
+];
+function checkBadges(){ S.badges=S.badges||{}; for(const b of BADGES){ if(!S.badges[b.id]&&b.cond()){ S.badges[b.id]=true; setTimeout(()=>toast(b.icon+" "+b.name+"!"),500);} } }
+function ring(pct,size,cx){ const r=size/2-7,c=2*Math.PI*r,off=c*(1-Math.max(0,Math.min(pct,1)));
+  return `<div class="ringwrap" style="width:${size}px;height:${size}px">
+    <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="transform:rotate(-90deg)">
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--line)" stroke-width="7"/>
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" style="transition:stroke-dashoffset .7s"/>
+    </svg><div class="rc">${cx}</div></div>`; }
+function printTodayCards(){ ensureToday();
+  if(!S.today.words.length){ toast("Öva några ord först! 🐻"); return; }
+  const cards=S.today.words.map(w=>`<div class="pcard">${w.img?`<div class="pem">${w.img}</div>`:''}<div class="psv">${esc(w.sv)}</div><div class="ppos">${esc(w.pos||'')}</div><div class="pes">${esc(w.es)}</div><div class="pex">${esc(w.ex||'')}</div></div>`).join("");
+  $("#printArea").innerHTML=`<h1>🐻 lil svensk björn</h1><div class="psub">Dagens ord · ${new Date().toLocaleDateString('sv-SE')} · ${S.today.words.length} ord</div><div class="pgrid">${cards}</div>`;
+  toast("Välj 'Spara som PDF' 🖨️");
+  setTimeout(()=>{ try{window.print();}catch(e){toast("Skriv ut stöds ej här");} },300);
+}
+
+/* ===================== BJÖRN (SNUTTIG-stil) ===================== */
+function bearSVG(size,scarf){
+  return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="50" cy="95" rx="30" ry="4" fill="rgba(0,0,0,.07)"/>
+    <ellipse cx="16" cy="60" rx="8" ry="13" fill="#fdfbf7" stroke="#e6ddcf" stroke-width="1.3"/>
+    <ellipse cx="84" cy="60" rx="8" ry="13" fill="#fdfbf7" stroke="#e6ddcf" stroke-width="1.3"/>
+    <path d="M50 20 C74 20 80 44 80 62 C80 84 66 93 50 93 C34 93 20 84 20 62 C20 44 26 20 50 20 Z" fill="#ffffff" stroke="#e6ddcf" stroke-width="1.3"/>
+    <circle cx="31" cy="24" r="8" fill="#ffffff" stroke="#e6ddcf" stroke-width="1.3"/>
+    <circle cx="69" cy="24" r="8" fill="#ffffff" stroke="#e6ddcf" stroke-width="1.3"/>
+    <circle cx="31" cy="24" r="3.6" fill="#f2d9cf"/><circle cx="69" cy="24" r="3.6" fill="#f2d9cf"/>
+    <ellipse cx="39" cy="86" rx="8" ry="10" fill="#fdfbf7" stroke="#e6ddcf" stroke-width="1.3"/>
+    <ellipse cx="61" cy="86" rx="8" ry="10" fill="#fdfbf7" stroke="#e6ddcf" stroke-width="1.3"/>
+    <ellipse cx="39" cy="88" rx="4" ry="5" fill="#e7d6c6"/><ellipse cx="61" cy="88" rx="4" ry="5" fill="#e7d6c6"/>
+    <circle cx="35" cy="81" r="1.3" fill="#e7d6c6"/><circle cx="39" cy="80" r="1.3" fill="#e7d6c6"/><circle cx="43" cy="81" r="1.3" fill="#e7d6c6"/>
+    <circle cx="57" cy="81" r="1.3" fill="#e7d6c6"/><circle cx="61" cy="80" r="1.3" fill="#e7d6c6"/><circle cx="65" cy="81" r="1.3" fill="#e7d6c6"/>
+    <ellipse cx="41" cy="44" rx="3.3" ry="4" fill="#2f2a28"/><ellipse cx="59" cy="44" rx="3.3" ry="4" fill="#2f2a28"/>
+    <circle cx="42.1" cy="42.7" r="1.1" fill="#fff"/><circle cx="60.1" cy="42.7" r="1.1" fill="#fff"/>
+    <ellipse cx="50" cy="53" rx="4.6" ry="3.2" fill="#2f2a28"/>
+    <path d="M50 56 Q50 60 46 60 M50 56 Q50 60 54 60" stroke="#c4b2a2" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <circle cx="34" cy="52" r="3.6" fill="#fbdcd6" opacity=".55"/><circle cx="66" cy="52" r="3.6" fill="#fbdcd6" opacity=".55"/>
+    ${scarf?`<path d="M31 65 Q50 75 69 65 L67 72 Q50 80 33 72 Z" fill="#2f80c4"/><path d="M62 69 l6 12 -6 2 -3 -11 Z" fill="#2f6fb0"/>`:''}
+  </svg>`;
+}
+function snowSVG(){ let s='<svg class="snow" viewBox="0 0 300 200" preserveAspectRatio="none">'; for(let i=0;i<14;i++)s+=`<circle cx="${(i*37)%300}" cy="${(i*53)%200}" r="${1+i%3}" fill="white" opacity=".5"/>`; return s+'</svg>'; }
+
+/* ===================== ROUTER ===================== */
+let current="hem";
+function go(r){ current=r; render(); window.scrollTo(0,0); }
+function applyTheme(){ document.documentElement.setAttribute("data-theme",S.theme==="dark"?"dark":""); $("#themeBtn").textContent=S.theme==="dark"?"☀️":"🌙"; }
+function renderChrome(){ $("#profBtn").textContent=curProfile().emoji; }
+function render(){ renderChrome(); renderNav(); ({hem:Hem,lar:Lar,ordforrad:Ordforrad,fraser:Fraser,grammatik:Grammatik,verb:Verb,ova:Ova,ovning:Ova,reading:Reading,writing:Writing,framsteg:Framsteg,profil:Profil}[current]||Hem)(); }
+function renderNav(){ const items=[["hem","🏠","Hem",["hem"]],["lar","📚","Lär",["lar","ordforrad","fraser","grammatik","verb"]],["ova","✏️","Öva",["ova","ovning","reading","writing"]],["framsteg","📈","Framsteg",["framsteg"]]];
+  $("#nav").innerHTML=items.map(([r,i,sv,grp])=>`<button class="${grp.includes(current)?'active':''}" onclick="go('${r}')"><span class="ni">${i}</span><span>${sv}</span></button>`).join(""); }
+function lvlOn(l){ return S.levels[l]!==false; }
+
+/* ===================== HEM ===================== */
+const TIPS=[
+  "Pasa el cursor por cualquier palabra sueca <span style='color:var(--accent-ink)'>subrayada</span> y verás la traducción. ¡Intenta leer sin mirar!",
+  "Los verbos del Grupo 1 (-ar) son los más fáciles: su pretérito siempre acaba en <b>-ade</b>. Empieza por ahí.",
+  "El truco del sueco: <b>en</b> y <b>ett</b>. Aprende cada sustantivo con su artículo desde el principio.",
+  "No traduzcas en tu cabeza. Asocia la palabra sueca directamente con la imagen o la sensación.",
+  "5 minutos al día baten a 1 hora el domingo. La repetición espaciada funciona si vuelves cada día.",
+  "El supinum (talat, ätit, bott) se usa con <b>har/hade</b>: <i>Jag har ätit</i> = He comido.",
+  "En <b>Ordförråd</b> puedes elegir tu nivel (A1/A2/B1) y añadir tus propias palabras en 📌 Mina ord.",
+];
+function Hem(){ ensureToday();
+  const due=dueWords().length;
+  const pool=activeWords(); const wod=pool.length?pool[(new Date().getDate()*7)%pool.length]:allWords()[0];
+  const L=levelOf(), h=new Date().getHours();
+  const hi=h<10?["God morgon","Buenos días"]:h<18?["God dag","Buenas"]:["God kväll","Buenas noches"];
+  const goalPct=Math.min(S.today.count/S.goal,1), goalDone=S.today.count>=S.goal;
+  view.innerHTML=`
+  <div class="card hero fade">${snowSVG()}
+    <span class="lvlpill">⭐ <span class="sv" data-es="Nivel">Nivå</span> ${L.lvl}</span>
+    <h1 style="margin-top:10px">${hi[0]}, ${esc(curProfile().name)}! 🐻</h1>
+    <p><span class="sv" data-es="${hi[1]}. ¿Aprendemos sueco hoy?">Ska vi lära oss svenska idag?</span></p>
+    <div class="xpbar"><i style="width:${Math.round(L.into/L.need*100)}%"></i></div>
+    <div style="font-size:.72rem;opacity:.85;margin-top:5px">${L.into} / ${L.need} XP</div>
+    <div class="bear-big">${bearSVG(128,true)}</div>
+  </div>
+  <div class="card fade today-card ${goalJustHit?'glow':''}">
+    ${ring(goalPct,88,`<span class="rn" style="color:${goalDone?'var(--good)':'var(--accent-ink)'}">${S.today.count}</span><span class="rl">/ ${S.goal}</span>`)}
+    <div class="txt"><h2 style="margin:0">${goalDone?'🎉 ':'🎯 '}<span class="sv" data-es="Meta de hoy">Dagens mål</span></h2>
+      <p class="sub">${goalDone?'<span class="sv" data-es="¡Meta cumplida! Sigue si quieres.">Klart för idag! Fortsätt gärna.</span>':`${S.today.count} / ${S.goal} <span class="sv" data-es="prácticas hoy">övningar idag</span>`}</p>
+      <button class="btn block" style="margin-top:8px" onclick="startReview()">${due>0?`🔁 Repetera ${due} ord`:'▶ Öva ord'}</button></div>
+  </div>
+  <div class="card fade"><h2>⭐ <span class="sv" data-es="Palabra del día">Dagens ord</span></h2>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:8px">
+      <div style="font-size:2rem">${wod.img||'📘'}</div>
+      <div style="flex:1"><div style="font-size:1.45rem;font-weight:800;color:var(--accent-ink)">${esc(wod.sv)}</div>
+        <div class="sub">${esc(wod.es)} · <i>${esc(wod.ex)}</i></div></div>
+      <button class="speak" onclick="speak('${esc(wod.sv).replace(/'/g,'')}')">🔊</button></div>
+  </div>
+  <div class="card fade"><h2>📄 <span class="sv" data-es="Flashcards de hoy en PDF">Dagens flashcards</span></h2>
+    <p class="sub">${S.today.words.length?`<span class="sv" data-es="Baja en PDF las ${S.today.words.length} palabras acertadas hoy, con su imagen, para imprimir y recortar.">Spara dagens ${S.today.words.length} ord som PDF — med bild, klara att skriva ut.</span>`:'<span class="sv" data-es="Acierta palabras hoy y aquí podrás bajarte un PDF con ellas.">Öva idag så kan du spara dina ord som PDF här.</span>'}</p>
+    <button class="btn warm block" style="margin-top:8px" onclick="printTodayCards()">⬇️ <span class="sv" data-es="Generar PDF">Skapa PDF</span>${S.today.words.length?` (${S.today.words.length})`:''}</button>
+  </div>
+  <div class="stats fade">
+    <div class="stat"><div class="n">${S.streak}</div><div class="l">🔥 <span class="sv" data-es="Racha">dagar</span></div></div>
+    <div class="stat"><div class="n">${totalLearned()}</div><div class="l">✅ <span class="sv" data-es="Dominadas">ord klara</span></div></div>
+    <div class="stat"><div class="n">${S.xp}</div><div class="l">⭐ XP</div></div>
+  </div>
+  <div class="card fade"><h2>🐻 <span class="sv" data-es="Consejo de Björn">Björns tips</span></h2><p class="sub">${TIPS[(new Date().getDate())%TIPS.length]}</p></div>`;
+  goalJustHit=false; hookHover();
+}
+
+/* ===================== ORDFÖRRÅD ===================== */
+function toggleLevel(l){ S.levels[l]=!(S.levels[l]!==false); save(); Ordforrad(); }
+function Ordforrad(){
+  const cats=Object.keys(VOCAB).filter(c=>levelOn(c)||c==='mina');
+  view.innerHTML=`
+  <button class="back" onclick="go('lar')">‹ Lär</button>
+  <div class="card fade"><h2>📚 <span class="sv" data-es="Vocabulario por temas">Ordförråd</span></h2>
+    <p class="sub"><span class="sv" data-es="Elige tu nivel y los temas. La ✓ verde incluye el tema en los repasos.">Välj nivå och teman. Den gröna ✓ tar med temat i repetitionerna.</span></p>
+    <div style="margin-top:10px">${LEVELS.map(l=>`<button class="pill ${lvlOn(l)?'on':''}" onclick="toggleLevel('${l}')">${l}</button>`).join("")}</div>
+    <button class="btn warm block sm" style="margin-top:12px" onclick="AddWord('mina')">➕ <span class="sv" data-es="Añadir mis propias palabras">Lägg till egna ord</span></button>
+  </div>
+  <div class="grid fade">
+    ${cats.map(cat=>{ const c=VOCAB[cat],p=catProgress(cat),on=isActive(cat);
+      return `<div class="cat ${on?'':'off'}" onclick="openCat('${cat}')">
+        <div class="lvltag">${c.custom?'★':c.lvl}</div>
+        <div class="toggle ${on?'on':''}" onclick="event.stopPropagation();toggleCat('${cat}')">${on?'✓':''}</div>
+        <div class="ico">${c.icon}</div><div class="t">${esc(c.title)}</div>
+        <div class="e">${esc(c.es)} · ${c.words.length} ord</div>
+        <div class="bar"><i style="width:${p}%"></i></div>
+        <div class="pct">${p}% ${p>=100&&c.words.length?'🏅':''}</div></div>`; }).join("")}
+  </div>`;
+  hookHover();
+}
+function toggleCat(cat){ S.active[cat]=!isActive(cat); save(); Ordforrad(); }
+function openCat(cat){ const c=VOCAB[cat];
+  view.innerHTML=`
+  <button class="back" onclick="go('ordforrad')">‹ <span class="sv" data-es="Temas">Teman</span></button>
+  <div class="card fade"><h2>${c.icon} ${esc(c.title)}</h2><p class="sub">${esc(c.es)} · ${c.custom?'★':c.lvl}</p>
+    ${c.words.length?`<div class="btnrow" style="margin-top:12px">
+      <button class="btn" onclick="startFlash('${cat}')">🃏 <span class="sv" data-es="Tarjetas">Flashcards</span></button>
+      <button class="btn warm" onclick="startCatQuiz('${cat}')">🎯 Quiz</button></div>`:`<p class="sub" style="margin-top:10px">Aún no hay palabras aquí.</p>`}
+    <button class="btn ghost block sm" style="margin-top:10px" onclick="AddWord('${cat}')">➕ <span class="sv" data-es="Añadir palabra a este tema">Lägg till ord</span></button>
+  </div>
+  <div class="card fade"><ul class="wordlist">
+    ${c.words.map(w=>{ const m=masteryOf(cat,w.sv); const isCustom=(S.custom[cat]&&S.custom[cat].some(x=>x.sv===w.sv));
+      return `<li><span class="mastery m${m}"></span><span class="em">${w.img||''}</span><span class="w">${esc(w.sv)}</span>
+        <button class="speak" style="width:30px;height:30px;font-size:.9rem;margin:0" onclick="speak('${esc(w.sv).replace(/'/g,'')}')">🔊</button>
+        <span class="e2">${esc(w.es)}</span>
+        ${isCustom?`<button class="del" onclick="delCustom('${cat}','${esc(w.sv).replace(/'/g,'')}')">✕</button>`:''}</li>`; }).join("")}
+  </ul></div>`;
+  hookHover();
+}
+function delCustom(cat,sv){ if(!S.custom[cat])return; S.custom[cat]=S.custom[cat].filter(w=>w.sv!==sv);
+  if(!S.custom[cat].length)delete S.custom[cat]; save(); VOCAB=buildVocab(); openCat(cat); toast("Borttaget"); }
+function AddWord(preset){ const cats=Object.keys(VOCAB);
+  view.innerHTML=`
+  <button class="back" onclick="go('ordforrad')">‹ Tillbaka</button>
+  <div class="card fade"><h2>➕ <span class="sv" data-es="Añadir una palabra">Lägg till ord</span></h2>
+    <div class="field"><label>Tema</label><select id="aCat">${cats.map(c=>`<option value="${c}" ${c===preset?'selected':''}>${VOCAB[c].icon} ${esc(VOCAB[c].title)}</option>`).join("")}</select></div>
+    <div class="field"><label>Svenska * <span class="sub">(ej. "en bil", "att köra")</span></label><input id="aSv" placeholder="en bok"></div>
+    <div class="field"><label>Español *</label><input id="aEs" placeholder="un libro"></div>
+    <div class="field"><label>Emoji <span class="sub">opcional (ej. 📕)</span></label><input id="aImg" placeholder="📕" maxlength="4"></div>
+    <div class="field"><label>Ordklass</label><select id="aPos"><option value="subst">subst (sustantivo)</option><option value="verb">verb</option><option value="adj">adj (adjetivo)</option><option value="adv">adv (adverbio)</option><option value="uttryck">uttryck (expresión)</option></select></div>
+    <div class="field"><label>Exempel (svenska) <span class="sub">opcional</span></label><input id="aEx" placeholder="Jag läser en bok."></div>
+    <div class="field"><label>Ejemplo (español) <span class="sub">opcional</span></label><input id="aExEs" placeholder="Leo un libro."></div>
+    <button class="btn block" onclick="saveWord()">💾 Spara ord</button>
+  </div>`;
+  hookHover();
+}
+function saveWord(){ const cat=$("#aCat").value, sv=$("#aSv").value.trim(), es=$("#aEs").value.trim();
+  if(!sv||!es){ toast("Falta sueco o español"); return; }
+  const w={sv,es,pos:$("#aPos").value,img:$("#aImg").value.trim(),ex:$("#aEx").value.trim()||sv,exEs:$("#aExEs").value.trim()||es,custom:true};
+  S.custom[cat]=S.custom[cat]||[]; S.custom[cat].push(w); save(); VOCAB=buildVocab(); toast("Ord tillagt! 🎉"); openCat(cat); }
+
+/* Flashcards */
+let flashSet=[],flashIdx=0,flashCat=null;
+function startFlash(cat){ flashCat=cat; flashSet=shuffle(VOCAB[cat].words.map(w=>({...w,cat}))); flashIdx=0; renderFlash(); }
+function startReview(){ const d=dueWords(); flashSet=(d.length?shuffle(d):shuffle(activeWords())).slice(0,12); flashCat="__mix"; flashIdx=0; if(!flashSet.length){toast("Aktivera minst ett tema");return go('ordforrad');} renderFlash(); }
+function renderFlash(){ if(flashIdx>=flashSet.length)return flashDone(); const w=flashSet[flashIdx];
+  view.innerHTML=`
+  <button class="back" onclick="go('${flashCat==='__mix'?'hem':'ordforrad'}')">‹ Stäng</button>
+  <div class="progress-dots">${flashSet.map((_,i)=>`<span class="dot ${i<flashIdx?'done':''} ${i===flashIdx?'now':''}"></span>`).join("")}</div>
+  <div class="fc" id="fc"><div class="fc-inner">
+    <div class="fc-face"><div class="word">${esc(w.sv)}</div><div class="pos">${esc(w.pos)}</div>
+      <button class="speak" onclick="event.stopPropagation();speak('${esc(w.sv).replace(/'/g,'')}')">🔊</button>
+      <div class="hint">👆 <span class="sv" data-es="Toca para girar">tryck för att vända</span></div></div>
+    <div class="fc-face fc-back">${w.img?`<div class="emoji">${w.img}</div>`:''}<div class="es">${esc(w.es)}</div>
+      <div class="ex">${esc(String(w.sv).replace(/^att /,''))} · ${esc(w.ex)}</div><div class="exes">${esc(w.exEs)}</div></div>
+  </div></div>
+  <div class="btnrow" style="margin-top:4px">
+    <button class="btn ghost" style="flex:1;color:var(--bad)" onclick="gradeFlash(false)">↻ <span class="sv" data-es="Difícil / repetir">Svårt</span></button>
+    <button class="btn" style="flex:1;background:var(--good)" onclick="gradeFlash(true)">✓ <span class="sv" data-es="¡Lo sé!">Kan!</span></button></div>
+  <p class="center sub" style="margin-top:10px">${flashIdx+1} / ${flashSet.length}</p>`;
+  const fc=$("#fc"); fc.onclick=()=>fc.classList.toggle("flipped"); hookHover();
+}
+function gradeFlash(ok){ const w=flashSet[flashIdx]; const cat=w.cat||flashCat; srsUpdate(cat,w.sv,ok); award(ok,6,{...w,cat}); flashIdx++; renderFlash(); }
+function flashDone(){ view.innerHTML=`<div class="card center fade confetti" style="padding:34px 18px"><div class="big-emoji">🎉</div>${bearSVG(90,true)}
+  <h2 class="center" style="justify-content:center;margin-top:10px">Bra jobbat!</h2>
+  <p class="sub"><span class="sv" data-es="Has repasado">Du repeterade</span> ${flashSet.length} ord.</p>
+  <button class="btn block" style="margin-top:16px" onclick="go('${flashCat==='__mix'?'hem':'ordforrad'}')">Klar ✓</button></div>`;
+  hookHover(); toast("🔥 +"+flashSet.length); }
+
+/* Quiz */
+let quizSet=[],quizIdx=0,quizRight=0,quizCorrectText="";
+function startCatQuiz(cat){ quizSet=shuffle(VOCAB[cat].words.map(w=>({...w,cat}))); quizIdx=0; quizRight=0; renderQuiz('ordforrad'); }
+function renderQuiz(backTo){ if(quizIdx>=quizSet.length)return quizDone(backTo);
+  const w=quizSet[quizIdx], askSv=Math.random()<.5;
+  const pool=allWords().filter(x=>x.sv!==w.sv&&x.es!==w.es);
+  const opts=shuffle([w,...shuffle(pool).slice(0,3)]);
+  const prompt=askSv?w.sv:w.es, correct=askSv?w.es:w.sv; quizCorrectText=correct;
+  view.innerHTML=`
+  <button class="back" onclick="go('${backTo}')">‹ Stäng</button>
+  <div class="qbadge">${quizIdx+1} / ${quizSet.length} · ${quizRight} ✓</div>
+  <div class="card fade"><div class="qbadge">${askSv?'🇸🇪 → 🇪🇸':'🇪🇸 → 🇸🇪'}</div>
+    <div class="q">${esc(prompt)} ${askSv?`<button class="speak" style="width:34px;height:34px;font-size:1rem" onclick="speak('${esc(w.sv).replace(/'/g,'')}')">🔊</button>`:''}</div>
+    <div id="opts">${opts.map(o=>{const val=askSv?o.es:o.sv; return `<button class="opt" onclick="answerQuiz(this,${val===correct?1:0},'${backTo}','${o.cat}','${esc(o.sv).replace(/'/g,'')}')">${esc(val)}</button>`;}).join("")}</div>
+  </div>`;
+  hookHover();
+}
+function answerQuiz(btn,ok,backTo,cat,sv){ [...$("#opts").children].forEach(b=>{ b.classList.add("dim"); if(b.textContent===quizCorrectText)b.classList.add("correct"); });
+  if(ok)quizRight++; else btn.classList.add("wrong");
+  const w=quizSet[quizIdx]; srsUpdate(w.cat,w.sv,!!ok); award(!!ok,10,w); if(ok)toast("Rätt! 🎉");
+  setTimeout(()=>{ quizIdx++; renderQuiz(backTo); }, ok?650:1150);
+}
+function quizDone(backTo){ const pct=Math.round(quizRight/quizSet.length*100);
+  view.innerHTML=`<div class="card center fade confetti" style="padding:34px 18px"><div class="big-emoji">${pct>=80?'🏅':pct>=50?'👍':'💪'}</div>${bearSVG(90,true)}
+  <h2 class="center" style="justify-content:center">${quizRight} / ${quizSet.length} rätt</h2>
+  <p class="sub">${pct}% · ${pct>=80?'<span class="sv" data-es="¡Excelente!">Utmärkt!</span>':'<span class="sv" data-es="¡Sigue así!">Fortsätt så!</span>'}</p>
+  <button class="btn block" style="margin-top:16px" onclick="go('${backTo}')">Klar ✓</button></div>`;
+  hookHover();
+}
+
+/* ===================== VERB ===================== */
+function Verb(){ const acc=S.verbTries?Math.round(S.verbScore/S.verbTries*100):0;
+  view.innerHTML=`
+  <div class="card fade"><h2>🔤 <span class="sv" data-es="Verbos y conjugación">Verb & böjning</span></h2>
+    <p class="sub"><span class="sv" data-es="El sueco tiene 4 grupos de verbos.">Svenskan har fyra verbgrupper.</span></p>
+    <button class="btn block warm" style="margin-top:12px" onclick="startVerbDrill()">✏️ <span class="sv" data-es="Practicar conjugación">Öva böjning</span>${acc?` · ${acc}%`:''}</button></div>
+  ${Object.keys(VERBS.groups).map(g=>{const G=VERBS.groups[g];
+    return `<div class="card fade"><h2>${G.name}</h2><p class="sub">${G.es}</p><p class="sub" style="margin-top:4px"><b>Mönster:</b> ${G.pattern}</p>
+      <table style="margin-top:10px"><tr><th>Infinitiv</th><th>Presens</th><th>Preteritum</th><th>Supinum</th></tr>
+      ${VERBS.list.filter(v=>v.grp==g).slice(0,6).map(v=>`<tr><td class="sw">${v.inf}</td><td>${v.presens}</td><td>${v.pret}</td><td>${v.sup}</td></tr>`).join("")}</table></div>`; }).join("")}
+  <div class="card fade"><h2>📝 <span class="sv" data-es="Cómo se usan los tiempos">Hur tempusen används</span></h2>
+    <p class="sub" style="line-height:1.7"><b>Presens</b> (presente): <i>Jag <b>talar</b> svenska</i> — Hablo sueco.<br>
+    <b>Preteritum</b> (pretérito): <i>Jag <b>talade</b> igår</i> — Hablé ayer.<br>
+    <b>Perfekt</b> (har + supinum): <i>Jag har <b>talat</b></i> — He hablado.<br>
+    <b>Imperativ</b> (orden): <i><b>Tala</b>!</i> — ¡Habla!</p></div>`;
+  hookHover();
+}
+let vDrill=null;
+const TENSES=[["presens","Presens","presente"],["pret","Preteritum","pretérito"],["sup","Supinum (har ___)","supino"]];
+function startVerbDrill(){ nextVerbDrill(); }
+function nextVerbDrill(){ const v=VERBS.list[(Math.random()*VERBS.list.length)|0], t=TENSES[(Math.random()*TENSES.length)|0]; vDrill={v,t};
+  view.innerHTML=`
+  <button class="back" onclick="go('verb')">‹ Stäng</button>
+  <div class="card fade"><div class="qbadge"><span class="grp-pill">${VERBS.groups[v.grp].name}</span></div>
+    <div class="q" style="margin-bottom:6px">${v.inf}<br><span class="sub" style="font-size:.85rem">${v.es}</span></div>
+    <p class="center sub">👉 <span class="sv" data-es="Escribe en">Skriv i</span> <b>${t[1]}</b> (${t[2]})</p>
+    <input id="vIn" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" style="width:100%;padding:14px;font-size:1.3rem;text-align:center;border:2px solid var(--line);border-radius:12px;margin:14px 0;background:var(--bg);color:var(--ink)" placeholder="…">
+    <div id="vFb"></div><button class="btn block" id="vCheck">Kontrollera</button></div>`;
+  const inp=$("#vIn"); inp.focus(); $("#vCheck").onclick=checkVerb; inp.addEventListener("keydown",e=>{if(e.key==="Enter")checkVerb();}); hookHover();
+}
+function checkVerb(){ const {v,t}=vDrill, ans=$("#vIn").value.trim().toLowerCase(), correct=v[t[0]].toLowerCase(), ok=ans===correct;
+  S.verbTries++; if(ok)S.verbScore++; save(); award(ok,8,null);
+  $("#vFb").innerHTML=ok?`<div class="card" style="background:var(--good-bg);border-color:var(--good);color:var(--good);text-align:center;font-weight:700">✓ Rätt! ${correct}</div>`
+    :`<div class="card" style="background:var(--bad-bg);border-color:var(--bad);color:var(--bad);text-align:center;font-weight:700">✗ <span class="sv" data-es="Respuesta correcta:">Rätt svar:</span> ${correct}</div>`;
+  speak(correct); $("#vCheck").textContent="Nästa ▶"; $("#vCheck").onclick=nextVerbDrill; $("#vIn").disabled=true; hookHover();
+}
+
+/* ===================== ÖVNING ===================== */
+/* ===================== LÄR (hub) ===================== */
+function Lar(){
+  view.innerHTML=`
+  <div class="card fade"><h2>📚 <span class="sv" data-es="Aprender">Lär dig</span></h2>
+    <p class="sub"><span class="sv" data-es="Vocabulario, frases del día a día y gramática.">Ordförråd, vardagsfraser och grammatik.</span></p></div>
+  <div class="card fade" onclick="go('ordforrad')" style="cursor:pointer"><h2>🗂️ <span class="sv" data-es="Vocabulario por temas">Ordförråd</span></h2><p class="sub">Temas A1–C2, flashcards con imagen y quiz. Elige tu nivel.</p></div>
+  <div class="card fade" onclick="go('fraser')" style="cursor:pointer"><h2>💬 <span class="sv" data-es="Frases del día a día">Fraser</span></h2><p class="sub">Frases cotidianas (no solo palabras): tarjetas y traducción.</p></div>
+  <div class="card fade" onclick="go('grammatik')" style="cursor:pointer"><h2>🔤 <span class="sv" data-es="Gramática: los palabros pequeños">Grammatik</span></h2><p class="sub">Pronombres, en/ett, orden de palabras, <i>inte</i>, preposiciones y verbos.</p></div>`;
+  hookHover();
+}
+
+/* ===================== ÖVA (hub) ===================== */
+function Ova(){
+  const act=LEVELS.filter(lvlOn).join(" ");
+  view.innerHTML=`
+  <div class="card fade"><h2>✏️ <span class="sv" data-es="Practicar">Öva</span></h2>
+    <p class="sub"><span class="sv" data-es="Ejercicios por nivel. Niveles activos:">Övningar efter nivå. Aktiva nivåer:</span> <b>${act||'—'}</b> · <span class="sub">(cámbialos en Lär › Ordförråd)</span></p></div>
+  <div class="card fade" onclick="startTranslate()" style="cursor:pointer"><h2>🔄 <span class="sv" data-es="Traducir frases (estilo examen)">Översätt</span></h2><p class="sub">Te doy una frase y la escribes en el otro idioma (ambos sentidos).</p></div>
+  <div class="card fade" onclick="go('reading')" style="cursor:pointer"><h2>📖 <span class="sv" data-es="Comprensión lectora">Läsning</span></h2><p class="sub">Textos por nivel con preguntas, estilo reading de Cambridge.</p></div>
+  <div class="card fade" onclick="go('writing')" style="cursor:pointer"><h2>✍️ <span class="sv" data-es="Expresión escrita">Skrivning</span></h2><p class="sub">Escribes un texto breve y lo comparas con un modelo.</p></div>
+  <div class="card fade" onclick="startMix()" style="cursor:pointer"><h2>🎯 <span class="sv" data-es="Examen grande de vocabulario">Stor quiz</span></h2><p class="sub">20 palabras al azar de tus temas activos.</p></div>
+  <div class="card fade" onclick="startGap()" style="cursor:pointer"><h2>🧩 <span class="sv" data-es="Rellenar huecos (verbos)">Lucktext</span></h2><p class="sub">Completa la frase con la forma verbal correcta.</p></div>
+  <div class="card fade" onclick="startListen()" style="cursor:pointer"><h2>👂 <span class="sv" data-es="Dictado">Hörövning</span></h2><p class="sub">Escucha la palabra sueca y elige el significado.</p></div>
+  <div class="card fade" onclick="startVerbDrill()" style="cursor:pointer"><h2>🔡 <span class="sv" data-es="Conjugación de verbos">Verbböjning</span></h2><p class="sub">Escribe el verbo en presens, preteritum o supinum.</p></div>`;
+  hookHover();
+}
+function levelPool(arr){ const a=arr.filter(x=>lvlOn(x.lvl)); return a.length?a:arr; }
+
+/* ===================== FRASER ===================== */
+function Fraser(){
+  const n=PHRASES.filter(p=>lvlOn(p.lvl)).length;
+  view.innerHTML=`
+  <button class="back" onclick="go('lar')">‹ Lär</button>
+  <div class="card fade"><h2>💬 <span class="sv" data-es="Frases cotidianas">Fraser</span></h2>
+    <p class="sub"><span class="sv" data-es="Frases útiles para hablar de verdad. ${n} frases en tus niveles activos.">${n} fraser i dina aktiva nivåer.</span></p>
+    <div class="btnrow" style="margin-top:12px">
+      <button class="btn" onclick="startPhraseFlash()">🃏 <span class="sv" data-es="Tarjetas">Flashcards</span></button>
+      <button class="btn warm" onclick="startTranslate()">🔄 <span class="sv" data-es="Traducir">Översätt</span></button>
+    </div></div>
+  <div class="card fade"><ul class="wordlist">
+    ${levelPool(PHRASES).slice(0,40).map(p=>`<li><span class="w" style="flex:1">${esc(p.sv)}</span>
+      <button class="speak" style="width:30px;height:30px;font-size:.9rem;margin:0" onclick="speak('${esc(p.sv).replace(/'/g,'')}')">🔊</button>
+      <span class="e2">${esc(p.es)} · ${p.lvl}</span></li>`).join("")}
+  </ul></div>`;
+  hookHover();
+}
+let phrSet=[],phrIdx=0;
+function startPhraseFlash(){ phrSet=shuffle(levelPool(PHRASES)).slice(0,12); phrIdx=0; renderPhrase(); }
+function renderPhrase(){
+  if(phrIdx>=phrSet.length){ view.innerHTML=`<div class="card center fade confetti" style="padding:34px 18px"><div class="big-emoji">🎉</div>${bearSVG(90,true)}<h2 class="center" style="justify-content:center;margin-top:10px">Klart!</h2><button class="btn block" style="margin-top:16px" onclick="go('fraser')">Klar ✓</button></div>`; return hookHover(); }
+  const p=phrSet[phrIdx];
+  view.innerHTML=`
+  <button class="back" onclick="go('fraser')">‹ Stäng</button>
+  <div class="progress-dots">${phrSet.map((_,i)=>`<span class="dot ${i<phrIdx?'done':''} ${i===phrIdx?'now':''}"></span>`).join("")}</div>
+  <div class="fc" id="fc"><div class="fc-inner">
+    <div class="fc-face"><span class="pos">${p.lvl}</span><div class="word" style="font-size:1.35rem;margin-top:8px">${esc(p.sv)}</div>
+      <button class="speak" onclick="event.stopPropagation();speak('${esc(p.sv).replace(/'/g,'')}')">🔊</button>
+      <div class="hint">👆 tryck för att vända</div></div>
+    <div class="fc-face fc-back"><div class="es" style="font-size:1.2rem">${esc(p.es)}</div></div>
+  </div></div>
+  <button class="btn block" style="margin-top:6px" onclick="phrIdx++;renderPhrase()">Nästa ▶</button>
+  <p class="center sub" style="margin-top:10px">${phrIdx+1} / ${phrSet.length}</p>`;
+  const fc=$("#fc"); fc.onclick=()=>fc.classList.toggle("flipped"); hookHover();
+}
+/* Översätt (traducción tipo examen) */
+let trSet=[],trIdx=0,trRight=0;
+function norm(s){ return String(s).toLowerCase().trim().replace(/\s+/g," ").replace(/[.!?¡¿]/g,""); }
+function startTranslate(){ trSet=shuffle(levelPool(PHRASES)).slice(0,10); trIdx=0; trRight=0; renderTranslate(); }
+function renderTranslate(){
+  if(trIdx>=trSet.length)return genericDone(trRight,trSet.length,'ova');
+  const p=trSet[trIdx], toSv=Math.random()<.6;
+  const prompt=toSv?p.es:p.sv, answer=toSv?p.sv:p.es;
+  view.innerHTML=`
+  <button class="back" onclick="go('ova')">‹ Stäng</button>
+  <div class="qbadge">${trIdx+1} / ${trSet.length} · ${trRight} ✓ · ${p.lvl}</div>
+  <div class="card fade"><div class="qbadge">${toSv?'🇪🇸 → 🇸🇪 (escribe en sueco)':'🇸🇪 → 🇪🇸 (escribe en español)'}</div>
+    <div class="q" style="font-size:1.15rem">${esc(prompt)}</div>
+    <textarea id="trIn" style="width:100%;padding:12px;font-size:1.05rem;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-height:60px" placeholder="…"></textarea>
+    <div id="trFb"></div>
+    <button class="btn block" id="trBtn" style="margin-top:8px">Kontrollera</button></div>`;
+  const inp=$("#trIn"); inp.focus();
+  $("#trBtn").onclick=()=>checkTranslate(answer,toSv,p);
+  hookHover();
+}
+function checkTranslate(answer,toSv,p){
+  const val=$("#trIn").value; const ok=norm(val)===norm(answer);
+  const close=!ok && norm(val).length>2 && (norm(answer).includes(norm(val))||norm(val).includes(norm(answer)));
+  if(ok||close)trRight++;
+  if(toSv&&(ok||close))speak(answer);
+  award(ok||close,10,null);
+  $("#trFb").innerHTML=`<div class="card" style="margin-top:12px;background:${ok?'var(--good-bg)':'var(--bad-bg)'};border-color:${ok?'var(--good)':'var(--bad)'}">
+    <div style="font-weight:700;color:${ok?'var(--good)':'var(--bad)'}">${ok?'✓ Rätt!':close?'≈ Casi — revisa':'✗ Respuesta modelo:'}</div>
+    <div style="margin-top:6px;font-size:1.05rem">${esc(answer)}</div>
+    ${!ok?`<div class="sub" style="margin-top:4px">Tu respuesta: ${esc(val||'—')}</div>`:''}</div>`;
+  $("#trIn").disabled=true; $("#trBtn").textContent="Nästa ▶"; $("#trBtn").onclick=()=>{ trIdx++; renderTranslate(); };
+}
+
+/* ===================== GRAMMATIK ===================== */
+function Grammatik(){
+  view.innerHTML=`
+  <button class="back" onclick="go('lar')">‹ Lär</button>
+  <div class="card fade"><h2>🔤 <span class="sv" data-es="Gramática">Grammatik</span></h2>
+    <p class="sub"><span class="sv" data-es="Los palabros pequeños que decides sobre la marcha al hablar.">De små orden du behöver när du pratar.</span></p></div>
+  ${GRAMMAR.map(g=>`<div class="card fade" onclick="grammarTopic('${g.id}')" style="cursor:pointer"><h2>${g.icon} ${g.title} <span class="sub" style="font-weight:400">· ${g.es}</span></h2></div>`).join("")}
+  <div class="card fade" onclick="go('verb')" style="cursor:pointer"><h2>🔡 <span class="sv" data-es="Verbos y conjugación">Verb & böjning</span></h2><p class="sub">Los 4 grupos y práctica de conjugación.</p></div>`;
+  hookHover();
+}
+function grammarTopic(id){ const g=GRAMMAR.find(x=>x.id===id);
+  view.innerHTML=`
+  <button class="back" onclick="go('grammatik')">‹ Grammatik</button>
+  <div class="card fade"><h2>${g.icon} ${g.title}</h2><p class="sub" style="line-height:1.7;margin-top:8px">${g.lesson}</p>
+    <button class="btn block" style="margin-top:12px" onclick="startGrammar('${id}')">✏️ <span class="sv" data-es="Practicar">Öva</span> (${g.drills.length})</button></div>`;
+  hookHover();
+}
+let grSet=[],grIdx=0,grRight=0,grId=null;
+function startGrammar(id){ grId=id; grSet=shuffle(GRAMMAR.find(x=>x.id===id).drills); grIdx=0; grRight=0; renderGrammar(); }
+function renderGrammar(){
+  if(grIdx>=grSet.length)return genericDone(grRight,grSet.length,'grammatik');
+  const d=grSet[grIdx], opts=shuffle(d.opts.map((o,i)=>({o,correct:i===d.answer})));
+  view.innerHTML=`
+  <button class="back" onclick="grammarTopic('${grId}')">‹ Tillbaka</button>
+  <div class="qbadge">${grIdx+1} / ${grSet.length} · ${grRight} ✓</div>
+  <div class="card fade"><div class="q" style="font-size:1.15rem">${esc(d.sv)}</div>
+    <p class="center sub" style="margin-top:-8px;margin-bottom:12px">${esc(d.es)}</p>
+    <div id="opts">${opts.map(o=>`<button class="opt" onclick="answerGrammar(this,${o.correct?1:0})">${esc(o.o)}</button>`).join("")}</div></div>`;
+  hookHover();
+}
+function answerGrammar(btn,ok){ const d=grSet[grIdx];
+  [...$("#opts").children].forEach((b,i)=>{ b.classList.add("dim"); if(b.textContent===d.opts[d.answer])b.classList.add("correct"); });
+  if(ok){grRight++;toast("Rätt! 🎉");}else btn.classList.add("wrong"); award(!!ok,8,null);
+  setTimeout(()=>{grIdx++;renderGrammar();},ok?700:1300);
+}
+
+/* ===================== LÄSNING (reading) ===================== */
+function Reading(){
+  const txts=TEXTS.filter(t=>lvlOn(t.lvl));
+  view.innerHTML=`
+  <button class="back" onclick="go('ova')">‹ Öva</button>
+  <div class="card fade"><h2>📖 <span class="sv" data-es="Comprensión lectora">Läsning</span></h2>
+    <p class="sub">${txts.length?'Elige un texto de tu nivel:':'Activa más niveles en Lär › Ordförråd para ver textos.'}</p></div>
+  ${txts.map((t,i)=>`<div class="card fade" onclick="openText(${TEXTS.indexOf(t)})" style="cursor:pointer"><h2>${esc(t.title)} <span class="sub" style="margin-left:auto;font-weight:400">${t.lvl}</span></h2><p class="sub">${esc(t.sv.slice(0,70))}…</p></div>`).join("")}`;
+  hookHover();
+}
+function openText(i){ const t=TEXTS[i];
+  view.innerHTML=`
+  <button class="back" onclick="go('reading')">‹ Texter</button>
+  <div class="card fade"><h2>${esc(t.title)} <span class="sub" style="margin-left:auto;font-weight:400">${t.lvl}</span></h2>
+    <p style="line-height:1.8;margin-top:8px">${esc(t.sv)}</p>
+    <button class="btn ghost block sm" style="margin-top:10px" onclick="document.getElementById('txtEs').style.display='block';this.style.display='none'">👁️ <span class="sv" data-es="Ver traducción">Visa översättning</span></button>
+    <p id="txtEs" class="sub" style="display:none;margin-top:10px;font-style:italic">${esc(t.es)}</p></div>
+  <div class="card fade"><h2>❓ <span class="sv" data-es="Preguntas">Frågor</span></h2>
+    <div id="rq">${t.questions.map((q,qi)=>`<div style="margin:12px 0"><div style="font-weight:600;margin-bottom:6px">${qi+1}. ${esc(q.sv?q.sv:q.q)}</div>
+      ${q.opts.map((o,oi)=>`<button class="opt" onclick="answerRead(${i},${qi},${oi},this)">${esc(o)}</button>`).join("")}</div>`).join("")}</div></div>`;
+  hookHover();
+}
+function answerRead(ti,qi,oi,btn){ const q=TEXTS[ti].questions[qi]; if(btn.closest('[data-done]'))return;
+  const wrap=btn.parentElement; if(wrap.dataset.done)return; wrap.dataset.done="1";
+  [...wrap.querySelectorAll('.opt')].forEach((b,i)=>{ b.classList.add('dim'); if(i===q.answer)b.classList.add('correct'); });
+  const ok=oi===q.answer; if(!ok)btn.classList.add('wrong'); award(ok,8,null); if(ok)toast("Rätt! 🎉");
+}
+
+/* ===================== SKRIVNING (writing) ===================== */
+function Writing(){
+  const ws=WRITE.filter(w=>lvlOn(w.lvl));
+  view.innerHTML=`
+  <button class="back" onclick="go('ova')">‹ Öva</button>
+  <div class="card fade"><h2>✍️ <span class="sv" data-es="Expresión escrita">Skrivning</span></h2>
+    <p class="sub">${ws.length?'Elige una tarea de tu nivel. Escribe, y luego compara con el modelo.':'Activa más niveles en Lär › Ordförråd.'}</p></div>
+  ${ws.map(w=>`<div class="card fade" onclick="openWrite(${WRITE.indexOf(w)})" style="cursor:pointer"><h2>${w.lvl} <span class="sub" style="font-weight:400;margin-left:8px">Uppgift</span></h2><p class="sub">${esc(w.prompt.slice(0,80))}…</p></div>`).join("")}`;
+  hookHover();
+}
+function openWrite(i){ const w=WRITE[i];
+  view.innerHTML=`
+  <button class="back" onclick="go('writing')">‹ Uppgifter</button>
+  <div class="card fade"><h2>✍️ ${w.lvl}</h2><p class="sub" style="margin-top:6px">${esc(w.prompt)}</p>
+    <textarea id="wIn" style="width:100%;padding:12px;font-size:1rem;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-height:120px;margin-top:10px" placeholder="Skriv på svenska…" oninput="document.getElementById('wCount').textContent=this.value.trim()?this.value.trim().split(/\\s+/).length:0"></textarea>
+    <div class="sub" style="margin-top:6px"><span id="wCount">0</span> ord</div>
+    <button class="btn block" style="margin-top:8px" onclick="document.getElementById('wModel').style.display='block';this.style.display='none'">📋 <span class="sv" data-es="Ver modelo">Visa modell</span></button>
+    <div id="wModel" class="card" style="display:none;margin-top:12px"><div style="font-weight:700;color:var(--accent-ink)">Modell / Modelo</div>
+      <p style="margin-top:6px;line-height:1.7">${esc(w.model)}</p>
+      <button class="speak" style="margin-top:8px" onclick="speak('${esc(w.model).replace(/'/g,'').replace(/\n/g,' ')}')">🔊</button>
+      <p class="sub" style="margin-top:8px">Compara: ¿usaste bien el orden de palabras y los verbos? Es normal que el tuyo sea distinto.</p></div></div>`;
+  hookHover();
+}
+let gapSet=[],gapIdx=0,gapRight=0;
+function startGap(){ gapSet=shuffle(SENTENCES).slice(0,15); gapIdx=0; gapRight=0; renderGap(); }
+function renderGap(){ if(gapIdx>=gapSet.length)return genericDone(gapRight,gapSet.length,'ovning'); const s=gapSet[gapIdx];
+  view.innerHTML=`<button class="back" onclick="go('ovning')">‹ Stäng</button>
+  <div class="qbadge">${gapIdx+1} / ${gapSet.length} · ${gapRight} ✓</div>
+  <div class="card fade"><div class="q">${esc(s.sv)}</div><p class="center sub" style="margin-top:-8px;margin-bottom:12px">${esc(s.es)}</p>
+    <div id="opts">${s.opts.map((o,i)=>`<button class="opt" onclick="answerGap(this,${i===s.answer?1:0})">${esc(o)}</button>`).join("")}</div></div>`;
+  hookHover();
+}
+function answerGap(btn,ok){ const s=gapSet[gapIdx];
+  [...$("#opts").children].forEach((b,i)=>{ b.classList.add("dim"); if(i===s.answer)b.classList.add("correct"); });
+  if(ok){gapRight++;toast("Rätt! 🎉");}else btn.classList.add("wrong"); award(!!ok,8,null);
+  setTimeout(()=>{gapIdx++;renderGap();},ok?700:1300);
+}
+function startMix(){ const p=activeWords(); if(!p.length){toast("Aktivera minst ett tema");return go('ordforrad');} quizSet=shuffle(p).slice(0,20); quizIdx=0; quizRight=0; renderQuiz('ovning'); }
+let lisSet=[],lisIdx=0,lisRight=0;
+function startListen(){ const p=activeWords(); if(!p.length){toast("Aktivera minst ett tema");return go('ordforrad');} lisSet=shuffle(p).slice(0,12); lisIdx=0; lisRight=0; renderListen(); }
+function renderListen(){ if(lisIdx>=lisSet.length)return genericDone(lisRight,lisSet.length,'ovning');
+  const w=lisSet[lisIdx], opts=shuffle([w,...shuffle(allWords().filter(x=>x.es!==w.es)).slice(0,3)]);
+  view.innerHTML=`<button class="back" onclick="go('ovning')">‹ Stäng</button>
+  <div class="qbadge">${lisIdx+1} / ${lisSet.length} · ${lisRight} ✓</div>
+  <div class="card fade center"><p class="sub"><span class="sv" data-es="Escucha y elige el significado">Lyssna och välj betydelse</span></p>
+    <button class="speak" style="width:70px;height:70px;font-size:1.8rem;margin:16px auto" onclick="speak('${esc(w.sv).replace(/'/g,'')}')">🔊</button>
+    <div id="opts" style="text-align:left">${opts.map(o=>`<button class="opt" onclick="answerListen(this,${o.es===w.es?1:0})">${esc(o.es)}</button>`).join("")}</div></div>`;
+  hookHover(); setTimeout(()=>speak(String(w.sv).replace(/'/g,'')),300);
+}
+function answerListen(btn,ok){ const w=lisSet[lisIdx];
+  [...$("#opts").children].forEach(b=>{ b.classList.add("dim"); if(b.textContent===w.es)b.classList.add("correct"); });
+  if(ok){lisRight++;srsUpdate(w.cat,w.sv,true);toast("Rätt! 🎉");}else{btn.classList.add("wrong");srsUpdate(w.cat,w.sv,false);} award(!!ok,8,w);
+  setTimeout(()=>{lisIdx++;renderListen();},ok?700:1200);
+}
+function genericDone(right,total,back){ const pct=Math.round(right/total*100);
+  view.innerHTML=`<div class="card center fade confetti" style="padding:34px 18px"><div class="big-emoji">${pct>=80?'🏅':pct>=50?'👍':'💪'}</div>${bearSVG(90,true)}
+  <h2 class="center" style="justify-content:center">${right} / ${total}</h2><p class="sub">${pct}%</p>
+  <button class="btn block" style="margin-top:16px" onclick="go('${back}')">Klar ✓</button></div>`;
+  hookHover();
+}
+
+/* ===================== FRAMSTEG ===================== */
+function Framsteg(){
+  const words=allWords(),learned=totalLearned();
+  const learning=words.filter(w=>masteryOf(w.cat,w.sv)===1).length;
+  const nnew=words.length-learned-learning;
+  const acc=S.verbTries?Math.round(S.verbScore/S.verbTries*100):0;
+  const weak=words.filter(w=>{const r=S.srs[wordKey(w.cat,w.sv)];return r&&r.box<=1&&masteryOf(w.cat,w.sv)<2;}).slice(0,8);
+  view.innerHTML=`
+  <div class="card fade"><h2>📈 <span class="sv" data-es="Tu progreso">Dina framsteg</span></h2>
+    <div class="stats" style="margin-top:12px">
+      <div class="stat"><div class="n">${S.streak}</div><div class="l">🔥 dagar</div></div>
+      <div class="stat"><div class="n">${S.totalReviews}</div><div class="l">🔁 <span class="sv" data-es="repasos">reps</span></div></div>
+      <div class="stat"><div class="n">${acc}%</div><div class="l">🔤 verb</div></div></div></div>
+  <div class="card fade"><h2>🏆 <span class="sv" data-es="Logros">Märken</span> <span class="sub" style="margin-left:auto;font-size:.8rem">${BADGES.filter(b=>S.badges[b.id]).length}/${BADGES.length}</span></h2>
+    <div class="badges">${BADGES.map(b=>{const got=S.badges[b.id]; return `<div class="badge ${got?'':'locked'}"><div class="bi">${b.icon}</div><div class="bn">${b.name}</div></div>`;}).join("")}</div></div>
+  <div class="card fade"><h2><span class="sv" data-es="Dominio del vocabulario">Ordförråd</span></h2>
+    <div style="display:flex;height:26px;border-radius:10px;overflow:hidden;margin:12px 0;border:1px solid var(--line)">
+      <div style="width:${learned/words.length*100}%;background:var(--good)"></div>
+      <div style="width:${learning/words.length*100}%;background:var(--warm)"></div>
+      <div style="width:${nnew/words.length*100}%;background:var(--line)"></div></div>
+    <p class="sub"><span class="mastery m2"></span>${learned} klara · <span class="mastery m1"></span>${learning} <span class="sv" data-es="aprendiendo">på gång</span> · <span class="mastery m0"></span>${nnew} <span class="sv" data-es="nuevas">nya</span></p></div>
+  <div class="card fade"><h2><span class="sv" data-es="Progreso por tema">Per tema</span></h2>
+    ${Object.keys(VOCAB).map(cat=>{const p=catProgress(cat);
+      return `<div style="margin:10px 0"><div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:4px">
+        <span>${VOCAB[cat].icon} ${esc(VOCAB[cat].title)} <span class="sub">${VOCAB[cat].custom?'':VOCAB[cat].lvl}</span></span><span class="sub">${p}%</span></div>
+        <div class="bar" style="height:8px;background:var(--line);border-radius:5px;overflow:hidden"><i style="display:block;height:100%;width:${p}%;background:var(--accent);border-radius:5px"></i></div></div>`;}).join("")}</div>
+  ${weak.length?`<div class="card fade"><h2>🎯 <span class="sv" data-es="Palabras que más fallas">Svaga ord</span></h2><p class="sub">Repasa estas pronto:</p>
+    <ul class="wordlist">${weak.map(w=>`<li><span class="em">${w.img||''}</span><span class="w">${esc(w.sv)}</span><span class="e2">${esc(w.es)}</span></li>`).join("")}</ul>
+    <button class="btn block" style="margin-top:12px" onclick="reviewWeak()">Repetera svaga ord ▶</button></div>`:''}
+  <div class="card fade"><h2>💾 <span class="sv" data-es="Copia de seguridad">Säkerhetskopia</span></h2>
+    <p class="sub">Exporta el progreso de este perfil, o impórtalo en otro dispositivo.</p>
+    <div class="btnrow" style="margin-top:10px"><button class="btn ghost sm" onclick="exportData()">⬇️ Exportera</button>
+      <button class="btn ghost sm" onclick="document.getElementById('impFile').click()">⬆️ Importera</button></div>
+    <input type="file" id="impFile" accept="application/json" style="display:none" onchange="importData(this.files[0])"></div>
+  <div class="card fade center"><button class="btn ghost" onclick="resetAll()">🗑️ <span class="sv" data-es="Reiniciar este perfil">Nollställ profil</span></button></div>`;
+  hookHover();
+}
+function reviewWeak(){ const words=allWords().filter(w=>{const r=S.srs[wordKey(w.cat,w.sv)];return r&&r.box<=1;});
+  flashSet=shuffle(words).slice(0,12); flashCat="__mix"; flashIdx=0; if(!flashSet.length){toast("Inga svaga ord!");return;} renderFlash(); }
+function exportData(){ const json=JSON.stringify(S,null,2);
+  (async()=>{ try{ const dl=(window.claude&&claude.use)?await claude.use("downloads"):null;
+    if(dl){ await dl.save({filename:"svensk-bjorn-"+curProfile().name+".json",data:json}); toast("Exporterat ⬇️"); return; } }catch(e){}
+    const blob=new Blob([json],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+    a.download="svensk-bjorn-"+curProfile().name+".json"; a.click(); URL.revokeObjectURL(a.href); toast("Exporterat ⬇️"); })();
+}
+function importData(file){ if(!file)return; const r=new FileReader();
+  r.onload=e=>{ try{ const d=JSON.parse(e.target.result);
+    S.mastery=Object.assign(S.mastery,d.mastery||{}); S.srs=Object.assign(S.srs,d.srs||{});
+    for(const k in (d.custom||{})){ S.custom[k]=(S.custom[k]||[]).concat(d.custom[k].filter(nw=>!(S.custom[k]||[]).some(x=>x.sv===nw.sv))); }
+    S.active=Object.assign(S.active,d.active||{}); S.levels=Object.assign(S.levels,d.levels||{});
+    if(typeof d.streak==="number")S.streak=Math.max(S.streak,d.streak);
+    if(typeof d.xp==="number")S.xp=Math.max(S.xp,d.xp);
+    if(typeof d.verbScore==="number"){S.verbScore+=d.verbScore;S.verbTries+=d.verbTries||0;}
+    save(); VOCAB=buildVocab(); toast("Importerat! 🎉"); go('framsteg');
+  }catch(err){ toast("Fel: filen kunde inte läsas"); } }; r.readAsText(file);
+}
+function resetAll(){ if(confirm("¿Borrar el progreso de ESTE perfil? (exporta antes si quieres guardarlo)")){ const t=S.theme; S=fresh(); S.theme=t; S.lastDay=new Date().toDateString(); save(); VOCAB=buildVocab(); go('hem'); toast("Nollställt"); } }
+
+/* ===================== PROFIL ===================== */
+const PROF_EMOJIS=["🐻","🦊","🐼","🐱","🐶","🦉","🐧","🦄","🐯","🐨","🐸","🐰"];
+function Profil(){
+  view.innerHTML=`
+  <button class="back" onclick="go('hem')">‹ Hem</button>
+  <div class="card fade"><h2>👤 <span class="sv" data-es="Perfiles">Profiler</span></h2>
+    <p class="sub"><span class="sv" data-es="Cada persona tiene su propio progreso, nivel y palabras, guardados por separado en este navegador.">Varje person har egna framsteg, nivå och ord — sparade separat.</span></p>
+    <div style="margin-top:12px">
+    ${PROF.list.map(p=>`<div class="prof-row ${p.id===PROF.cur?'cur':''}">
+      <span style="font-size:1.6rem">${p.emoji}</span>
+      <span style="font-weight:700;flex:1">${esc(p.name)} ${p.id===PROF.cur?'<span class="sub">(tú)</span>':''}</span>
+      ${p.id===PROF.cur?'':`<button class="btn sm ghost" onclick="switchProfile('${p.id}')">Byt</button>`}
+      ${PROF.list.length>1?`<button class="del" onclick="askDeleteProfile('${p.id}')">✕</button>`:''}</div>`).join("")}
+    </div>
+    <button class="btn warm block sm" style="margin-top:6px" onclick="AddProfile()">➕ <span class="sv" data-es="Nueva persona">Ny profil</span></button>
+  </div>
+  <div class="card fade"><p class="sub">💡 <span class="sv" data-es="Para privacidad total entre personas, lo mejor es que cada una use la app en su propio móvil u ordenador: ahí los datos ya son independientes.">För helt separata konton: använd appen på varje egen enhet.</span></p></div>`;
+  hookHover();
+}
+let newEmoji=PROF_EMOJIS[0];
+function AddProfile(){ newEmoji=PROF_EMOJIS[(Math.random()*PROF_EMOJIS.length)|0];
+  view.innerHTML=`
+  <button class="back" onclick="go('profil')">‹ Profiler</button>
+  <div class="card fade"><h2>➕ <span class="sv" data-es="Nueva persona">Ny profil</span></h2>
+    <div class="field"><label>Namn / Nombre</label><input id="pName" placeholder="Mamma" maxlength="16"></div>
+    <div class="field"><label>Figur</label><div id="emojiPick">${PROF_EMOJIS.map(e=>`<button class="pill" data-e="${e}" style="font-size:1.1rem">${e}</button>`).join("")}</div></div>
+    <button class="btn block" onclick="doAddProfile()">💾 <span class="sv" data-es="Crear">Skapa</span></button>
+  </div>`;
+  const pick=$("#emojiPick"); const sync=()=>{ [...pick.children].forEach(b=>b.classList.toggle("on",b.dataset.e===newEmoji)); };
+  [...pick.children].forEach(b=>b.onclick=()=>{ newEmoji=b.dataset.e; sync(); }); sync(); $("#pName").focus(); hookHover();
+}
+function doAddProfile(){ const name=$("#pName").value.trim()||"Ny"; const id=uid();
+  PROF.list.push({id,name,emoji:newEmoji}); PROF.cur=id; saveProfiles();
+  S=fresh(); S.lastDay=new Date().toDateString(); save(); VOCAB=buildVocab(); applyTheme(); go('hem'); toast("Hej, "+name+"! 🎉"); }
+function switchProfile(id){ PROF.cur=id; saveProfiles(); S=loadState(); VOCAB=buildVocab(); applyTheme(); go('hem'); toast("Hej, "+curProfile().name+"!"); }
+function askDeleteProfile(id){ const p=PROF.list.find(x=>x.id===id); if(!p)return;
+  if(!confirm("¿Borrar el perfil de "+p.name+" y todo su progreso?"))return;
+  PROF.list=PROF.list.filter(x=>x.id!==id); try{localStorage.removeItem(DPREFIX+id);}catch(e){}
+  if(PROF.cur===id){ PROF.cur=PROF.list[0].id; saveProfiles(); S=loadState(); VOCAB=buildVocab(); applyTheme(); go('hem'); }
+  else { saveProfiles(); Profil(); } toast("Profil borttagen"); }
+
+/* ===================== HOVER (touch) ===================== */
+function hookHover(){ view.querySelectorAll(".sv[data-es]").forEach(el=>{ el.addEventListener("click",e=>{
+  if(window.matchMedia("(hover:none)").matches){ e.stopPropagation();
+    document.querySelectorAll(".sv.show").forEach(x=>x!==el&&x.classList.remove("show"));
+    el.classList.toggle("show"); setTimeout(()=>el.classList.remove("show"),2200); } }); }); }
+
+/* ===================== INIT ===================== */
+$("#themeBtn").onclick=()=>{ const dark=document.documentElement.getAttribute("data-theme")==="dark";
+  document.documentElement.setAttribute("data-theme",dark?"":"dark"); S.theme=dark?"light":"dark"; save(); $("#themeBtn").textContent=dark?"🌙":"☀️"; };
+$("#profBtn").onclick=()=>go('profil');
+applyTheme();
+$("#bearMini").innerHTML=bearSVG(34,false);
+
+(function pwa(){ const icon="data:image/svg+xml,"+encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="110" fill="#fbeaa6"/><g transform="translate(66,70) scale(3.8)">`+bearSVG(100,false).replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'')+`</g></svg>`);
+  try{ if(!document.querySelector('link[rel="apple-touch-icon"]')){ const al=document.createElement("link"); al.rel="apple-touch-icon"; al.href=icon; document.head.appendChild(al); }
+    if(!document.querySelector('link[rel="manifest"]')){
+      const man={name:"lil svensk björn",short_name:"Svensk Björn",start_url:".",scope:".",display:"standalone",orientation:"portrait",background_color:"#eef3f6",theme_color:"#2f6fb0",icons:[{src:icon,sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"}]};
+      const ml=document.createElement("link"); ml.rel="manifest"; ml.href=URL.createObjectURL(new Blob([JSON.stringify(man)],{type:"application/manifest+json"})); document.head.appendChild(ml);
+    }
+  }catch(e){} })();
+
+render();
+</script>
+</body>
+</html>
